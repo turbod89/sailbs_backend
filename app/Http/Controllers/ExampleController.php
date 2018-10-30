@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class ExampleController extends Controller
+class ExampleController extends BaseController
 {
     /**
      * Create a new controller instance.
@@ -11,7 +11,7 @@ class ExampleController extends Controller
      */
     public function __construct()
     {
-        //
+        parent::__construct();
     }
 
     //
