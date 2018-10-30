@@ -31,7 +31,7 @@ class CreateUsersTable extends Migration
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
             $table->dateTime('updated_at')->default(DB::raw('NOW()'));
-            $table->dateTime('deleted_at');
+            $table->dateTime('deleted_at')->nullable(true);
 
             $table->unique('email', 'email');
             $table->unique('username', 'username');

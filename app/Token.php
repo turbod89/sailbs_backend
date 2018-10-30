@@ -76,5 +76,5 @@ class Token extends BaseModel {
         self::where(DB::raw('expire_at < NOW()'))->delete();
     }
 
-    protected $connection = 'local';
+    //protected $connection = 'local';
 }

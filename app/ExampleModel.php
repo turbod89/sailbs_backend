@@ -40,5 +40,5 @@ class ExampleModel extends BaseModel {
 
 
 
-    protected $connection = 'local';
+    //protected $connection = 'local';
 }
