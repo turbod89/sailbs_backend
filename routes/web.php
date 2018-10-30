@@ -24,7 +24,15 @@ $router->get('/', function () use ($router) {
  |
  */
 
-$router->get('/token',[
+/**
+ * @api {get} /tokens Get session token
+ * @apiName GetToken
+ * @apiGroup Token
+ *
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->get('/tokens',[
     'as' => 'getToken',
     'uses' => 'TokenController@getSessionToken',
 ]);
@@ -38,6 +46,17 @@ $router->get('/token',[
  |
  */
 
+/**
+ * @api {post} /auth User Login
+ * @apiName Login
+ * @apiGroup Authorization
+ *
+ * @apiParam {String} username Username.
+ * @apiParam {String} password User's password.
+ *
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
 $router->post('/auth',[
     'as' => 'login',
     'uses' => 'AuthController@login',
@@ -48,6 +67,15 @@ $router->post('/auth/login',[
     'uses' => 'AuthController@login',
 ]);
 
+
+/**
+ * @api {delete} /auth User Logout
+ * @apiName Logout
+ * @apiGroup Authorization
+ *
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
 $router->delete('/auth',[
     'as' => 'logout',
     'uses' => 'AuthController@logout',
@@ -57,6 +85,19 @@ $router->get('/auth/logout',[
     'as' => 'logout',
     'uses' => 'AuthController@logout',
 ]);
+
+
+/**
+ * @api {post} /auth/signup User Signup
+ * @apiName Signup
+ * @apiGroup Authorization
+ *
+ * @apiParam {String} username Username.
+ * @apiParam {String} password User's password.
+ * @apiParam {String} email User's email.
+ *
+ * @apiSuccess {Array} errors An array with errors.
+ */
 
 $router->post('/auth/signup',[
     'as' => 'login',
