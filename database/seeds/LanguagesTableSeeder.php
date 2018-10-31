@@ -79,4 +79,9 @@ class LanguagesTableSeeder extends Seeder
 
 
     }
+
+
+    public function setNames() {
+
+    }
 }
