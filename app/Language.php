@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class Language extends BaseModel {
 
+    use \Dimsav\Translatable\Translatable;
+
+    public $translatedAttributes = ['name'];
+
     private static $lang = null;
 
     protected $table = 'languages';

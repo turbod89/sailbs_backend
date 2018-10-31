@@ -32,6 +32,17 @@ class CreateLanguagesTable extends Migration
             $table->unique('iso_code');
             $table->unique('language_code');
         });
+
+        Schema::dropIfExists('language_translations');
+        Schema::create('language_translations', function(Blueprint $table) {
+            $table->increments('id');
+            $table->integer('language_id')->unsigned();
+            $table->string('name');
+            $table->string('locale')->index();
+
+            $table->unique(['language_id','locale']);
+            $table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
+        });
     }
 
     /**
@@ -45,5 +56,6 @@ class CreateLanguagesTable extends Migration
             //
         });
         Schema::dropIfExists('languages');
+        Schema::dropIfExists('language_translations');
     }
 }
