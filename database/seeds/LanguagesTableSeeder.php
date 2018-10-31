@@ -11,6 +11,22 @@ class LanguagesTableSeeder extends Seeder
      */
     public function run()
     {
+
+        DB::table('languages')->insert([
+            'iso_code' => 'en',
+            'language_code' => 'en-us',
+            'date_format_lite' => 'm/j/Y',
+            'date_format_full' => 'm/j/Y H:i:s',
+        ]);
+
+        DB::table('languages')->insert([
+            'iso_code' => 'fr',
+            'language_code' => 'fr',
+            'date_format_lite' => 'd/m/Y',
+            'date_format_full' => 'd/m/Y H:i:s',
+        ]);
+
+
         DB::table('languages')->insert([
             'iso_code' => 'es',
             'language_code' => 'es',
