@@ -3,5 +3,5 @@
   "version": "0.1.0",
   "description": "Backend API for Sailbs",
   "title": "Custom apiDoc browser title",
-  "url" : "http://sailbs.com"
+  "url" : "http://api.sailbs.com"
 }

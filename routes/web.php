@@ -25,9 +25,11 @@ $router->get('/', function () use ($router) {
  */
 
 /**
- * @api {get} /tokens Get session token
+ * @api {get} /tokens Get Session Token
  * @apiName GetToken
  * @apiGroup Token
+ *
+ * @apiHeader {String} api-token Your application token.
  *
  * @apiSuccess {Array} errors An array with errors.
  */
@@ -50,6 +52,7 @@ $router->get('/tokens',[
  * @api {post} /auth User Login
  * @apiName Login
  * @apiGroup Authorization
+ * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
  *
  * @apiParam {String} username Username.
  * @apiParam {String} password User's password.
