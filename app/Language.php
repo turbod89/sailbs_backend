@@ -53,7 +53,7 @@ class Language extends BaseModel {
         }
 
         if (is_null(self::$lang)) {
-            self::$lang = self::where(['code' => 'es'])->first();
+            self::$lang = self::where(['code' => App::getLocale()])->first();
         }
 
         return self::$lang;
@@ -63,6 +63,7 @@ class Language extends BaseModel {
 
         if (!is_null($code)) {
             self::$lang = self::where(['code' => $code])->first();
+            App::setLocale(self::$lang->code);
         }
 
         return self::get();
