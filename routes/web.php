@@ -11,16 +11,6 @@
 |
 */
 
-/*
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
-*/
-
-$router->get('/',[
-    'as' => 'root',
-    'uses' => 'TestController@root',
-]);
-
+require_once ('test.php');
 require_once ('tokens.php');
 require_once ('auth.php');
