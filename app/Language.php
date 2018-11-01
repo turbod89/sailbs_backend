@@ -49,11 +49,11 @@ class Language extends BaseModel {
     public static function get($code = null) {
 
         if (!is_null($code)) {
-            return self::where(['code' => $code])->first();
+            return self::where(['iso_code' => $code])->first();
         }
 
         if (is_null(self::$lang)) {
-            self::$lang = self::where(['code' => App::getLocale()])->first();
+            self::$lang = self::where(['iso_code' => app('translator')->getLocale()])->first();
         }
 
         return self::$lang;
@@ -62,8 +62,8 @@ class Language extends BaseModel {
     public static function set($code = null) {
 
         if (!is_null($code)) {
-            self::$lang = self::where(['code' => $code])->first();
-            App::setLocale(self::$lang->code);
+            self::$lang = self::where(['iso_code' => $code])->first();
+            app('translator')->setLocale(self::$lang->isoCode);
         }
 
         return self::get();
