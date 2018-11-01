@@ -39,7 +39,7 @@ class TokenController extends BaseController
                 'errors' => [
                     [
                         'code' => 1,
-                        'message' => 'Unathorited API token.'
+                        'message' => 'Unauthorized API token.'
                     ],
                 ]
             ],401);
