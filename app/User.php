@@ -37,4 +37,8 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
         $this->attributes['hashed_password'] = md5($password);
     }
 
+    public function certificates() {
+        return $this->belongsToMany('App\Certificate','users_roles_certificates','user_id','certificate_id')->as('subscription')->withTimestamps();
+    }
+
 }
