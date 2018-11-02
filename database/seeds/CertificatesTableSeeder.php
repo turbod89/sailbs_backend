@@ -11,8 +11,8 @@ class CertificatesTableSeeder extends Seeder
      */
     public function run()
     {
-        $certificate = \App\Certificate::updateOrCreate([ 'code' => 'PNB']);
-        $certificate = \App\Certificate::updateOrCreate([ 'code' => 'PER']);
+        \App\Certificate::updateOrCreate([ 'code' => 'PNB']);
+        \App\Certificate::updateOrCreate([ 'code' => 'PER']);
 
         self::setNames();
     }
@@ -21,7 +21,7 @@ class CertificatesTableSeeder extends Seeder
     public function setNames() {
 
         $certificate = \App\Certificate::where(['code' => 'PNB'])->first();
-        $certificateTranslation = \App\CertificateTranslation::updateOrCreate(
+        \App\CertificateTranslation::updateOrCreate(
             ['locale' => 'es', 'certificate_id' => $certificate->id],
             [
                 'name' => 'Título de Patrón de Navegación Básica',
@@ -29,7 +29,7 @@ class CertificatesTableSeeder extends Seeder
                 'description' => 'Este título es el de Patrón de Navegación Básica.'
             ]
         );
-        $certificateTranslation = \App\CertificateTranslation::updateOrCreate(
+        \App\CertificateTranslation::updateOrCreate(
             ['locale' => 'en', 'certificate_id' => $certificate->id],
             [
                 'name' => 'Basic Coastal Skipper Certificate',
@@ -39,7 +39,7 @@ class CertificatesTableSeeder extends Seeder
         );
 
         $certificate = \App\Certificate::where(['code' => 'PER'])->first();
-        $certificateTranslation = \App\CertificateTranslation::updateOrCreate(
+        \App\CertificateTranslation::updateOrCreate(
             ['locale' => 'es', 'certificate_id' => $certificate->id],
             [
                 'name' => 'Título de Patrón de Embarcaciones de Recreo',
@@ -47,7 +47,7 @@ class CertificatesTableSeeder extends Seeder
                 'description' => 'Este título es el de Patrón de Embarcaciones de Recreo.'
             ]
         );
-        $certificateTranslation = \App\CertificateTranslation::updateOrCreate(
+        \App\CertificateTranslation::updateOrCreate(
             ['locale' => 'en', 'certificate_id' => $certificate->id],
             [
                 'name' => 'Coastal Skipper Certificate',

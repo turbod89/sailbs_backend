@@ -12,7 +12,7 @@ class TokensTableSeeder extends Seeder
     public function run()
     {
         // Default api token
-        DB::table('tokens')->insert([
+        \App\Token::updateOrCreate([
             'type' => 'api token',
             'value' => 'd3e76da78c846375c7722438a9f69b06',
             'id_api' => '1',
