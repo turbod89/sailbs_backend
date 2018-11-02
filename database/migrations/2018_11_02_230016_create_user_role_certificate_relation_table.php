@@ -14,7 +14,7 @@ class CreateUserRoleCertificateRelationTable extends Migration
     public function up()
     {
         Schema::dropIfExists('users_roles_certificates');
-        Schema::table('users_roles_certificates', function (Blueprint $table) {
+        Schema::create('users_roles_certificates', function (Blueprint $table) {
             $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 

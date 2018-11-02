@@ -38,7 +38,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
     }
 
     public function certificates() {
-        return $this->belongsToMany('App/Certificate','user_role_certificate','user_id','certificate_id')->as('subscription')->withTimestamps();
+        return $this->belongsToMany('App\Certificate','users_roles_certificates','user_id','certificate_id')->as('subscription')->withTimestamps();
     }
 
 }
