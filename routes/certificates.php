@@ -45,7 +45,7 @@ $router->post('/certificates',[
 
 
 /**
- * @api {post} /certificates unsubscribe to certificate
+ * @api {delete} /certificates unsubscribe to certificate
  * @apiName Relates a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
