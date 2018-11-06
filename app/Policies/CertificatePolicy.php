@@ -16,7 +16,7 @@ class CertificatePolicy
      */
     public function add(User $user, Certificate $certificate)
     {
-        return true;
+        return !empty($user);
     }
 
 }
