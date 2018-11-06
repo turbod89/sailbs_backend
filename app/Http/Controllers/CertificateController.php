@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Certificate;
+use App\User;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Integer;
 
 class CertificateController extends BaseController
 {
@@ -27,32 +29,56 @@ class CertificateController extends BaseController
         ]);
     }
 
-    public function add(Request $request) {
+    /**
+     * @param Integer $certificate_id
+     * @param User $user
+     * @return $this
+     */
+    private function _addCertificateToUser($certificate_id, User $user) {
 
-        $certificate_id = $request->input('certificate_id', null);
         $certificate = Certificate::find($certificate_id);
 
         if (empty($certificate)) {
-            return response()->json(['errors' => [
-                'No valid certificate_id provided.',
-            ]]);
+            $this->addError(
+                1,
+                "Provided certificate_id '${certificate_id}' is not valid."
+            );
+            return $this;
         }
 
-        $user = $request->user();
 
-        if ( $user->cannot('add',$certificate)) {
-            return response()->json(['errors' => [
-                'Action not allowed.',
-            ]]);
+        if ($user->cannot('add', $certificate)) {
+            $this->addError(
+                1,
+                "Provided certificate_id '${certificate_id}' is not valid."
+            );
+            return $this;
         }
 
         $user->certificates()->syncWithoutDetaching([
             $certificate->id => ['role_id' => 0]
         ]);
 
+        return $this;
+    }
+
+    public function add(Request $request) {
+
+        $user = $request->user();
+        $certificate_id = $request->input('certificate_id', null);
+        $certificate_ids = $request->input('certificate_ids',[]);
+
+        if (!empty($certificate_id)) {
+            $certificate_ids[] = $certificate_id;
+        }
+
+        foreach ($certificate_ids as $certificate_id) {
+            $this->_addCertificateToUser($certificate_id,$user);
+        }
+
         return response()->json([
             'data' => $user->certificates,
-            'errors' => [],
+            'errors' => $this->getErrors(),
         ]);
     }
 }

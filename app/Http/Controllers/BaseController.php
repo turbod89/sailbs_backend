@@ -7,4 +7,24 @@ class BaseController extends Controller
     function __construct()
     {
     }
+
+    public $errors = [];
+
+    public function hasErrors() {
+        return count($this->errors);
+    }
+
+    public function getErrors() {
+        return $this->errors;
+    }
+
+    protected function addError($code = 1, $message = 'Unknown error.', $data = null) {
+        $this->errors[] = [
+            'code' => $code,
+            'message' => $message,
+            'data' => $data,
+        ];
+
+        return $this;
+    }
 }
