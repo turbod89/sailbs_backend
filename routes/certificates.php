@@ -11,8 +11,9 @@
  */
 
 /**
- * @api {post} /certificates All certificates
+ * @api {get} /certificates Get certificates
  * @apiName Get Certificates
+ * @apiDescription Get all available certificates
  * @apiGroup Certificates
  *
  * @apiSuccess {Array} data An array with all certificates.
@@ -26,7 +27,8 @@ $router->get('/certificates',[
 
 /**
  * @api {post} /certificates Subscribe to certificate
- * @apiName Relates a certificate with the current user
+ * @apiName subscribe to certificate
+ * @apiDescription Relates a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
  *
@@ -37,6 +39,7 @@ $router->get('/certificates',[
  * @apiSuccess {Array} errors An array with errors.
  */
 
+
 $router->post('/certificates',[
     'as' => 'add certificates',
     'middleware' => 'auth',
@@ -45,8 +48,9 @@ $router->post('/certificates',[
 
 
 /**
- * @api {delete} /certificates unsubscribe to certificate
- * @apiName Relates a certificate with the current user
+ * @api {delete} /certificates Unsubscribe to certificate
+ * @apiName unsubscribet to certificate
+ * @apiDescription Delete a relation of a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
  *
