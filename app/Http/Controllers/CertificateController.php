@@ -19,16 +19,6 @@ class CertificateController extends BaseController
         parent::__construct();
     }
 
-    public function get(Request $request) {
-
-        $certificates = Certificate::all();
-
-        return response()->json([
-            'data' => $certificates,
-            'errors' => [],
-        ]);
-    }
-
     /**
      * @param Integer $certificate_id
      * @param User $user
@@ -93,6 +83,29 @@ class CertificateController extends BaseController
         ]);
 
         return $this;
+    }
+
+    public function getAll(Request $request) {
+
+        $certificates = Certificate::all();
+
+        return response()->json([
+            'data' => $certificates,
+            'errors' => [],
+        ]);
+    }
+
+    public function get(Request $request) {
+
+        $user = $request->user();
+
+        $certificates = $user->certificates;
+
+
+        return response()->json([
+            'data' => $certificates,
+            'errors' => [],
+        ]);
     }
 
     public function add(Request $request) {

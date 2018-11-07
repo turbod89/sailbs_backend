@@ -22,11 +22,32 @@
 
 $router->get('/certificates',[
     'as' => 'get certificates',
+    'uses' => 'CertificateController@getAll',
+]);
+
+
+/**
+ * @api {get} /me/certificates Get user certificates
+ * @apiName Get user certificates
+ * @apiDescription Get all certificates current user is subscribed to
+ * @apiGroup Certificates
+ * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
+ *
+ * @apiSuccess {Array} data An array with current subscribed certificates.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+
+$router->get('/me/certificates',[
+    'as' => 'get my certificates',
+    'middleware' => 'auth',
     'uses' => 'CertificateController@get',
 ]);
 
+
+
 /**
- * @api {post} /certificates Subscribe to certificate
+ * @api {post} /me/certificates Subscribe to certificate
  * @apiName subscribe to certificate
  * @apiDescription Relates a certificate with the current user
  * @apiGroup Certificates
@@ -40,7 +61,7 @@ $router->get('/certificates',[
  */
 
 
-$router->post('/certificates',[
+$router->post('/me/certificates',[
     'as' => 'add certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@add',
@@ -48,8 +69,8 @@ $router->post('/certificates',[
 
 
 /**
- * @api {delete} /certificates Unsubscribe to certificate
- * @apiName unsubscribet to certificate
+ * @api {delete} /me/certificates Unsubscribe to certificate
+ * @apiName unsubscribe to certificate
  * @apiDescription Delete a relation of a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
@@ -61,7 +82,7 @@ $router->post('/certificates',[
  * @apiSuccess {Array} errors An array with errors.
  */
 
-$router->delete('/certificates',[
+$router->delete('/me/certificates',[
     'as' => 'remove certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@remove',
