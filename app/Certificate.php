@@ -29,6 +29,7 @@ class Certificate extends BaseModel {
      * @var array
      */
     protected $hidden = [
+        'translations'
     ];
 
     protected $dates = [

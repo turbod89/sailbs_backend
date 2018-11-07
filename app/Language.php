@@ -29,6 +29,7 @@ class Language extends BaseModel {
      * @var array
      */
     protected $hidden = [
+        'translations'
     ];
 
     protected $dates = [
