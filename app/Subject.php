@@ -47,5 +47,9 @@ class Subject extends BaseModel {
     protected $maps = [
     ];
 
+    public function certificates() {
+        return $this->belongsToMany('App\Certificate','certificates_subjects','subject_id','certificate_id')->as('certificates');
+    }
+
     //protected $connection = 'local';
 }
