@@ -53,8 +53,8 @@ class SubjectsTableSeeder extends Seeder
 
     public function setRelationCertificates() {
 
-        $PNB = \App\Certificate::get(['code' => 'PNB']);
-        $PER = \App\Certificate::get(['code' => 'PER']);
+        $PNB = \App\Certificate::where(['code' => 'PNB'])->first();
+        $PER = \App\Certificate::where(['code' => 'PER'])->first();
 
         $subject = \App\Subject::where(['code' => 'NavegacionPER'])->first();
         $subject->certificates()->syncWithoutDetaching([
