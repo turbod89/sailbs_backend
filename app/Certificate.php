@@ -51,6 +51,21 @@ class Certificate extends BaseModel {
         return $this->belongsToMany('App\Subject','certificates_subjects','certificate_id','subject_id')->as('subjects');
     }
 
+    public function toArray()
+    {
+        $json = parent::toArray();
+
+        $json['subjects'] = [];
+        foreach ($this->subjects as $subject) {
+            $json['subjects'][] = [
+                'id' => $subject->id,
+                'code' => $subject->code,
+            ];
+        }
+
+        return $json;
+    }
+
 
     //protected $connection = 'local';
 }

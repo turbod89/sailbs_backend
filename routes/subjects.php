@@ -41,8 +41,12 @@ $router->get('/subjects',[
  *       "subject": {
  *              "code": "meteo",
  *              "certificates": [
- *                  "<certificate1 code>",
- *                  "<certificate2 code>",
+ *                  {
+ *                      id: "<certificate1 id. Required if not code provided>",
+ *                      code: "<certificate1 code. Required if not id provided>",
+ *                      max_errors: "<Integer. Optional>",
+ *                      num_questions: "<Integer. Optional>"
+ *                  },
  *                  ...
  *              ],
  *              "name": "Meteorology",
@@ -61,7 +65,7 @@ $router->get('/subjects',[
  *       ]
  *     }
  *
- * @apiSuccess {Array} data An array with all subjects.
+ * @apiSuccess {Array} data An array with subjects created.
  * @apiSuccess {Array} errors An array with errors.
  */
 
@@ -69,4 +73,39 @@ $router->post('/subjects',[
     'as' => 'post subjects',
     'middleware' => 'auth',
     'uses' => 'SubjectController@create',
+]);
+
+
+/**
+ * @api {delete} /subjects Delete subjects
+ * @apiName Delete Subjects
+ * @apiDescription Delete subjects
+ * @apiGroup Subjects
+ *
+ * @apiParam {Integer} subject_id (optional) Subject id to delete.
+ * @apiParam {Array} subject_ids (optional) Array with subjects's ids.
+ * @apiParam {String} subject_code (optional) Subject code to delete.
+ * @apiParam {Array} subject_codes (optional) Array with subjects's ids.
+ *
+ * @apiParamExample {json} Simple-subject-Example:
+ *     {
+ *       "subject_id": 2
+ *     }
+
+ * @apiParamExample {json} Multiple-subject-Example:
+ *     {
+ *       "subject_codes": [
+ *          "PER",
+ *          "PNB"
+ *       ]
+ *     }
+ *
+ * @apiSuccess {Array} data Null
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->delete('/subjects',[
+    'as' => 'delete subjects',
+    'middleware' => 'auth',
+    'uses' => 'SubjectController@delete',
 ]);

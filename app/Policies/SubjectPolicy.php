@@ -16,4 +16,8 @@ class SubjectPolicy
         return true;
     }
 
+    public function delete(?User $user) {
+        return true;
+    }
+
 }

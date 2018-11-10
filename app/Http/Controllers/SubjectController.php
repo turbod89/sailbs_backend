@@ -113,4 +113,50 @@ class SubjectController extends BaseController
         return $this->jsonData();
     }
 
+    public function delete(Request $request) {
+
+        if ($request->user()->can('delete',Subject::class)) {
+
+            $request_data = null;
+            if ($request->isJson()) {
+                $request_data = $request->json()->all();
+            } else {
+                $request_data = $request->all();
+            }
+
+            $subject_id = isset($request_data['subject_id']) ? $request_data['subject_id'] : null;
+            $subject_ids = isset($request_data['subject_ids']) ? $request_data['subject_ids'] : [];
+
+            if (!empty($subject_id)) {
+                $subject_ids[] = $subject_id;
+            }
+
+
+            $subject_code = isset($request_data['subject_code']) ? $request_data['subject_code'] : null;
+            $subject_codes = isset($request_data['subject_codes']) ? $request_data['subject_codes'] : [];
+
+            if (!empty($subject_code)) {
+                $subject_codes[] = $subject_code;
+            }
+
+            try {
+                Subject::destroy(collect($subject_ids));
+            } catch (\Exception $e) {
+                $this->addError(2, $e->getMessage());
+            }
+
+            try {
+                Subject::whereIn('code',$subject_codes)->delete();
+            } catch (\Exception $e) {
+                $this->addError(2, $e->getMessage());
+            }
+
+            return $this->jsonData();
+        } else {
+            $this->addError(1,'Not allowed to create subjects.');
+        }
+
+        return $this->jsonData();
+    }
+
 }
