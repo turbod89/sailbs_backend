@@ -15,3 +15,4 @@ require_once ('test.php');
 require_once ('tokens.php');
 require_once ('auth.php');
 require_once ('certificates.php');
+require_once ('subjects.php');
