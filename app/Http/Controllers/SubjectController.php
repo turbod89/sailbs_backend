@@ -71,6 +71,31 @@ class SubjectController extends BaseController
                         $subject->description = isset($subject_data['description']) ? $subject_data['description']  : '';
 
                         $subject->save();
+
+                        $certificates_data = isset($subject_data['certificates']) ? $subject_data['certificates']  : [];
+
+                        foreach ($certificates_data as $certificate_data) {
+                            $certificate_id = isset($certificate_data['id']) ? $certificate_data['id'] : null;
+                            $certificate_code = isset($certificate_data['code']) ? $certificate_data['code'] : null;
+
+                            if (empty($certificate_id) && empty($certificate_code)) {
+                                $this->addError(1,"Expected certificate's code or id not received.",$certificate_data);
+                            } else {
+                                if (empty($certificate_id)) {
+                                    $certificate_id = Certificate::where('code', $certificate_code)->first()->id;
+                                }
+                                $subject->certificates()->attach(
+                                    [
+                                        $certificate_id => [
+                                            'max_errors' => !empty($certificate_data['max_errors']) ? $certificate_data['max_errors'] : 0,
+                                            'num_questions' => !empty($certificate_data['num_questions']) ? $certificate_data['num_questions'] : 0,
+                                        ]
+                                    ]
+                                );
+                            }
+
+                        }
+
                         $data[] = $subject->toArray();
 
                     } catch (\Exception $e) {
