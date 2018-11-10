@@ -27,6 +27,7 @@ class CreateCertificatesTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->index('code');
+            $table->unique('code');
         });
 
         Schema::dropIfExists('certificate_translations');

@@ -27,6 +27,7 @@ class CreateSubjectsTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->index('code');
+            $table->index('code');
         });
 
         Schema::dropIfExists('subject_translations');
