@@ -19,6 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
+            $table->string(36)->nullable(false)->default(DB::raw('UUID()'));
             $table->integer('subject_id')->unsigned()->references('id')->on('subjects')->onDelete('cascade');
 
             $table->boolean('deleted')->default(false);
@@ -27,6 +28,8 @@ class CreateQuestionsTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->index('subject_id');
+            $table->index('uuid');
+            $table->unique('uuid');
 
         });
 
