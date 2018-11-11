@@ -47,21 +47,34 @@ $router->get('/me/certificates',[
 
 
 /**
- * @api {post} /me/certificates Subscribe to certificate
+ * @api {post} /certificates Subscribe to certificate
  * @apiName subscribe to certificate
  * @apiDescription Relates a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
  *
- * @apiParam {Integer} certificate_id (conditional) Certficate's wanted to subscribe to id. Obligatory if not <em>certificate_ids</em> is provided.
- * @apiParam {Array} certificate_ids (conditional) Array with certficates's wanted to subscribe to ids. Obligatory if not <em>certificate_id</em> is provided.
+ * @apiParam {Integer} certificate_id (optional) Certficate's wanted to subscribe to id.
+ * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to subscribe to ids.
+ * @apiParam {String} certificate_code (optional) Certficate's wanted to subscribe to code.
+ * @apiParam {Array} certificate_codes (optional) Array with certficates's wanted to subscribe to codes.
  *
- * @apiSuccess {Array} data An array with current subscribed certificates.
+ * @apiParam {Integer} user_id (optional) User who wanted to subscribe to id. If no user provided, logged user will be used.
+ * @apiParam {Array} user_ids (optional) Array with users whose wanted to subscribe to ids. If no user provided, logged user will be used.
+ *
+ * @apiParamExample {json} Subscribe-Example:
+ *     {
+ *       "certificate_codes": [
+ *              "PNB",
+ *              "PER"
+ *          ]
+ *     }
+ *
+ * @apiSuccess {Array} data An array with the pairs (user, certificate) successfully subscribed.
  * @apiSuccess {Array} errors An array with errors.
  */
 
 
-$router->post('/me/certificates',[
+$router->post('/certificates',[
     'as' => 'add certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@add',
@@ -69,20 +82,33 @@ $router->post('/me/certificates',[
 
 
 /**
- * @api {delete} /me/certificates Unsubscribe to certificate
+ * @api {delete} /certificates Unsubscribe to certificate
  * @apiName unsubscribe to certificate
  * @apiDescription Delete a relation of a certificate with the current user
  * @apiGroup Certificates
  * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
  *
- * @apiParam {Integer} certificate_id (conditional) Certficate's wanted to unsubscribe to id. Obligatory if not <em>certificate_ids</em> is provided.
- * @apiParam {Array} certificate_ids (conditional) Array with certficates's wanted to unsubscribe to ids. Obligatory if not <em>certificate_id</em> is provided.
+ * @apiParam {Integer} certificate_id (optional) Certficate's wanted to unsubscribe to id.
+ * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to unsubscribe to ids.
+ * @apiParam {String} certificate_code (optional) Certficate's wanted to unsubscribe to code.
+ * @apiParam {Array} certificate_codes (optional) Array with certficates's wanted to unsubscribe to codes.
  *
- * @apiSuccess {Array} data An array with current subscribed certificates.
+ * @apiParam {Integer} user_id (optional) User who wanted to unsubscribe to id.
+ * @apiParam {Array} user_ids (optional) Array with users whose wanted to unsubscribe to ids.
+ *
+ * @apiParamExample {json} Unsubscribe-Example:
+ *     {
+ *       "certificate_codes": [
+ *              "PNB",
+ *              "PER"
+ *          ]
+ *     }
+ *
+ * @apiSuccess {Array} data An array with the pairs (user, certificate) successfully unsubscribed.
  * @apiSuccess {Array} errors An array with errors.
  */
 
-$router->delete('/me/certificates',[
+$router->delete('/certificates',[
     'as' => 'remove certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@remove',
