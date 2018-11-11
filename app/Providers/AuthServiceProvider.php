@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Certificate;
 use App\Policies\CertificatePolicy;
+use App\Policies\SubjectPolicy;
+use App\Subject;
 use App\Token;
 use App\User;
 use Illuminate\Support\Facades\Gate;
@@ -68,5 +70,6 @@ class AuthServiceProvider extends ServiceProvider
 
     public function registerPolicies() {
         Gate::policy(Certificate::class, CertificatePolicy::class);
+        Gate::policy(Subject::class,SubjectPolicy::class);
     }
 }

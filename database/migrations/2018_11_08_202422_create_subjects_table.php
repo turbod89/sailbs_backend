@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCertificatesTable extends Migration
+class CreateSubjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateCertificatesTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('certificates');
-        Schema::create('certificates', function (Blueprint $table) {
+        Schema::dropIfExists('subjects');
+        Schema::create('subjects', function (Blueprint $table) {
             $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('code',16)->nullable(false);
+            $table->string('code',64)->nullable(false);
 
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
@@ -30,17 +30,17 @@ class CreateCertificatesTable extends Migration
             $table->unique('code');
         });
 
-        Schema::dropIfExists('certificate_translations');
-        Schema::create('certificate_translations', function(Blueprint $table) {
+        Schema::dropIfExists('subject_translations');
+        Schema::create('subject_translations', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('certificate_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
             $table->string('name');
             $table->string('short_name');
             $table->text('description');
             $table->string('locale')->index();
 
-            $table->unique(['certificate_id','locale']);
-            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
+            $table->unique(['subject_id','locale']);
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
         });
     }
 
@@ -51,10 +51,10 @@ class CreateCertificatesTable extends Migration
      */
     public function down()
     {
-        Schema::table('certificates', function (Blueprint $table) {
+        Schema::table('subjects', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('certificates');
-        Schema::dropIfExists('certificate_translations');
+        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('subject_translations');
     }
 }

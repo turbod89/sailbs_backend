@@ -27,4 +27,11 @@ class BaseController extends Controller
 
         return $this;
     }
+
+    protected function jsonData($data = null) {
+        return response()->json([
+            'data' => $data,
+            'errors' => $this->getErrors(),
+        ]);
+    }
 }
