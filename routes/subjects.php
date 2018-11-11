@@ -77,6 +77,55 @@ $router->post('/subjects',[
 
 
 /**
+ * @api {put} /subjects Put subjects
+ * @apiName Update Subjects
+ * @apiDescription Update subjects
+ * @apiGroup Subjects
+ *
+ * @apiParam {Subject} subject (conditional) Subject data to create. Fields as shown in example. Obligatory if not <em>subjects</em> is provided.
+ * @apiParam {Array} subjects (conditional) Array with subjects's data. Obligatory if not <em>subject</em> is provided.
+ *
+ * @apiParamExample {json} Simple-subject-Example:
+ *     {
+ *       "subject": {
+ *              "code": "meteo",
+ *              "certificates": [
+ *                  {
+ *                      id: "<certificate1 id. Required if not code provided>",
+ *                      code: "<certificate1 code. Required if not id provided>",
+ *                      max_errors: "<Integer. Optional>",
+ *                      num_questions: "<Integer. Optional>"
+ *                  },
+ *                  ...
+ *              ],
+ *              "name": "Meteorology",
+ *              "short_name": "Meteo",
+ *              "description": "<Meteorology Subject Description>"
+ *
+ *          }
+ *     }
+
+ * @apiParamExample {json} Multiple-subject-Example:
+ *     {
+ *       "subjects": [
+ *          {<subject structure>},
+ *          {<subject structure>},
+ *          ...
+ *       ]
+ *     }
+ *
+ * @apiSuccess {Array} data An array with subjects updated.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->put('/subjects',[
+    'as' => 'put subjects',
+    'middleware' => 'auth',
+    'uses' => 'SubjectController@update',
+]);
+
+
+/**
  * @api {delete} /subjects Delete subjects
  * @apiName Delete Subjects
  * @apiDescription Delete subjects

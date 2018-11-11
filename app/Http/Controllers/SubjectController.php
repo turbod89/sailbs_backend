@@ -59,7 +59,7 @@ class SubjectController extends BaseController
             foreach ($subjects_data as $subject_data) {
 
                 if (!isset($subject_data['code'])) {
-                    $this->addError(1,'Invalid code for subject.',$request_data);
+                    $this->addError(1,'Invalid code for subject.',$subject_data);
                 } else {
 
                     try {
@@ -78,21 +78,22 @@ class SubjectController extends BaseController
                             $certificate_id = isset($certificate_data['id']) ? $certificate_data['id'] : null;
                             $certificate_code = isset($certificate_data['code']) ? $certificate_data['code'] : null;
 
+                            $relation_data = [];
                             if (empty($certificate_id) && empty($certificate_code)) {
                                 $this->addError(1,"Expected certificate's code or id not received.",$certificate_data);
                             } else {
                                 if (empty($certificate_id)) {
                                     $certificate_id = Certificate::where('code', $certificate_code)->first()->id;
                                 }
-                                $subject->certificates()->attach(
-                                    [
-                                        $certificate_id => [
-                                            'max_errors' => !empty($certificate_data['max_errors']) ? $certificate_data['max_errors'] : 0,
-                                            'num_questions' => !empty($certificate_data['num_questions']) ? $certificate_data['num_questions'] : 0,
-                                        ]
-                                    ]
-                                );
+
+                                $relation_data[$certificate_id] = [
+                                    'max_errors' => !empty($certificate_data['max_errors']) ? $certificate_data['max_errors'] : 0,
+                                    'num_questions' => !empty($certificate_data['num_questions']) ? $certificate_data['num_questions'] : 0,
+                                ];
                             }
+                            $subject->certificates()->sync($relation_data);
+
+
 
                         }
 
@@ -108,6 +109,92 @@ class SubjectController extends BaseController
             return $this->jsonData($data);
         } else {
             $this->addError(1,'Not allowed to create subjects.');
+        }
+
+        return $this->jsonData();
+    }
+
+    public function update(Request $request) {
+
+        if ($request->user()->can('update',Subject::class)) {
+
+            $request_data = null;
+            if ($request->isJson()) {
+                $request_data = $request->json()->all();
+            } else {
+                $request_data = $request->all();
+            }
+
+            $subject_data = isset($request_data['subject']) ? $request_data['subject'] : null;
+            $subjects_data = isset($request_data['subjects']) ? $request_data['subjects'] : [];
+
+            if (!empty($subject_data)) {
+                $subjects_data[] = $subject_data;
+            }
+
+            $data = [];
+
+            foreach ($subjects_data as $subject_data) {
+
+                if (empty($subject_data['code']) && empty($subject_data['id'])) {
+                    $this->addError(1,  'Expected subject\'s code or id not received.',$subject_data);
+                } else {
+
+                    $subject = null;
+                    if (!empty($subject_data['id'])) {
+                        $subject = Subject::where('id',$subject_data['id'])->first();
+                    } else if (!empty($subject_data['code'])) {
+                        $subject = Subject::where('code',$subject_data['code'])->first();
+                    }
+
+                    if (empty($subject)) {
+                        $this->addError(1,  'Subject\'s code or id not found.',$subject_data);
+                    } else {
+                        try {
+
+                            $subject->code = !empty($subject_data['code']) ? $subject_data['code'] : $subject->code;
+                            $subject->name = !empty($subject_data['name']) ? $subject_data['name'] : $subject->name;
+                            $subject->short_name = !empty($subject_data['short_name']) ? $subject_data['short_name'] : $subject->short_name;
+                            $subject->description = !empty($subject_data['description']) ? $subject_data['description'] : $subject->description;
+
+                            $subject->save();
+
+                            $certificates_data = isset($subject_data['certificates']) ? $subject_data['certificates'] : [];
+
+                            foreach ($certificates_data as $certificate_data) {
+                                $certificate_id = isset($certificate_data['id']) ? $certificate_data['id'] : null;
+                                $certificate_code = isset($certificate_data['code']) ? $certificate_data['code'] : null;
+
+                                $relation_data = [];
+                                if (empty($certificate_id) && empty($certificate_code)) {
+                                    $this->addError(1, "Expected certificate's code or id not received.", $certificate_data);
+                                } else {
+                                    if (empty($certificate_id)) {
+                                        $certificate_id = Certificate::where('code', $certificate_code)->first()->id;
+                                    }
+
+                                    $relation_data[$certificate_id] = [
+                                        'max_errors' => !empty($certificate_data['max_errors']) ? $certificate_data['max_errors'] : 0,
+                                        'num_questions' => !empty($certificate_data['num_questions']) ? $certificate_data['num_questions'] : 0,
+                                    ];
+                                }
+                                $subject->certificates()->sync($relation_data);
+
+                            }
+
+                            $data[] = $subject->toArray();
+
+                        } catch (\Exception $e) {
+                            $this->addError(2, $e->getMessage());
+                        }
+                    }
+                }
+            }
+
+
+            return $this->jsonData($data);
+        } else {
+            $this->addError(1,'Not allowed to update subjects.');
         }
 
         return $this->jsonData();
@@ -153,7 +240,7 @@ class SubjectController extends BaseController
 
             return $this->jsonData();
         } else {
-            $this->addError(1,'Not allowed to create subjects.');
+            $this->addError(1,'Not allowed to delete subjects.');
         }
 
         return $this->jsonData();
