@@ -13,15 +13,15 @@ class SubjectPolicy
     }
 
     public function create(?User $user) {
-        return true;
+        return false;
     }
 
     public function update(?User $user) {
-        return true;
+        return false;
     }
 
     public function delete(?User $user) {
-        return true;
+        return false;
     }
 
 }
