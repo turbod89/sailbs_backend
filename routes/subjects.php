@@ -55,7 +55,7 @@ $router->get('/subjects',[
  *
  *          }
  *     }
-
+ *
  * @apiParamExample {json} Multiple-subject-Example:
  *     {
  *       "subjects": [
@@ -104,7 +104,7 @@ $router->post('/subjects',[
  *
  *          }
  *     }
-
+ *
  * @apiParamExample {json} Multiple-subject-Example:
  *     {
  *       "subjects": [
@@ -140,7 +140,7 @@ $router->put('/subjects',[
  *     {
  *       "subject_id": 2
  *     }
-
+ *
  * @apiParamExample {json} Multiple-subject-Example:
  *     {
  *       "subject_codes": [

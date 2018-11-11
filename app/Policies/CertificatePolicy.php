@@ -12,11 +12,25 @@ class CertificatePolicy
      *
      * @param  \App\User  $user
      * @param  \App\Certificate  $certificate
+     * @param  \App\User  $user_target
      * @return bool
      */
-    public function add(User $user, Certificate $certificate)
+    public function add(User $user, Certificate $certificate, User $user_target)
     {
-        return !empty($user);
+        return $user->id === $user_target->id;
+    }
+
+    /**
+     * Determine if the given certificate can be removed to user certificates.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Certificate  $certificate
+     * @param  \App\User  $user_target
+     * @return bool
+     */
+    public function remove(User $user, Certificate $certificate, User $user_target)
+    {
+        return self::add($user,$certificate,$user_target);
     }
 
 }
