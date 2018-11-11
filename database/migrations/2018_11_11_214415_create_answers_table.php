@@ -19,7 +19,7 @@ class CreateAnswersTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string(36)->nullable(false)->default(DB::raw('UUID()'));
+            $table->uuid('uuid')->nullable(false);
             $table->integer('question_id')->unsigned()->references('id')->on('questions')->onDelete('cascade');
             $table->integer('position')->nullable(false)->default(0);
             $table->boolean('correct')->nullable(false)->default(false);

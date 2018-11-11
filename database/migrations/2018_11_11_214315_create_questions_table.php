@@ -19,7 +19,7 @@ class CreateQuestionsTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string(36)->nullable(false)->default(DB::raw('UUID()'));
+            $table->uuid('uuid')->nullable(false);
             $table->integer('subject_id')->unsigned()->references('id')->on('subjects')->onDelete('cascade');
 
             $table->boolean('deleted')->default(false);
