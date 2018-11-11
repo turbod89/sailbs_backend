@@ -32,10 +32,12 @@ class QuestionsTableSeeder extends Seeder
 
     public function setNames(\App\Subject $subject, \App\Question $question, $index) {
 
+        $number = $index + 1;
+
         \App\QuestionTranslation::updateOrCreate(
             ['locale' => 'es', 'question_id' => $question->id],
             [
-                'statement' => "Pregunta de {$subject->name} número {($index + 1)}."
+                'statement' => "Pregunta de {$subject->name} número $number."
             ]
         );
 
@@ -44,7 +46,7 @@ class QuestionsTableSeeder extends Seeder
         \App\QuestionTranslation::updateOrCreate(
             ['locale' => 'en', 'question_id' => $question->id],
             [
-                'statement' => "Question about {$subject_name_en} number {($index + 1)}."
+                'statement' => "Question about {$subject_name_en} number $number."
             ]
         );
 

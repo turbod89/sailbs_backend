@@ -11,7 +11,7 @@ class Answer extends BaseModel {
 
     public $translatedAttributes = ['statement'];
 
-    protected $table = 'anwsers';
+    protected $table = 'answers';
     protected $primaryKey = 'id';
 
     /**
