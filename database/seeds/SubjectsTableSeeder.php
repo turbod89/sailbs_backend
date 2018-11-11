@@ -48,6 +48,14 @@ class SubjectsTableSeeder extends Seeder
                 'description' => 'Asignatura de nomenclatura.'
             ]
         );
+        \App\SubjectTranslation::updateOrCreate(
+            ['locale' => 'en', 'subject_id' => $subject->id],
+            [
+                'name' => 'Nomenclature',
+                'short_name' => 'Nomenclature',
+                'description' => 'Nomenclatura subject.'
+            ]
+        );
 
     }
 

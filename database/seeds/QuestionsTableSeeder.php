@@ -4,6 +4,9 @@ use Illuminate\Database\Seeder;
 
 class QuestionsTableSeeder extends Seeder
 {
+
+    const QUESTIONS_PER_SUBJECT = 10;
+
     /**
      * Run the database seeds.
      *
@@ -11,71 +14,40 @@ class QuestionsTableSeeder extends Seeder
      */
     public function run()
     {
+
         $subjects = \App\Subject::all();
 
+        foreach($subjects as $subject) {
+            for ($i = 0; $i < self::QUESTIONS_PER_SUBJECT; $i++) {
+                $uuid = \Webpatser\Uuid\Uuid::generate();
+                $question = new \App\Question();
+                $question->uuid = $uuid;
+                $question->save();
+                self::setNames($subject,$question,$i);
+            }
+        }
 
     }
 
 
-    public function setNames() {
+    public function setNames(\App\Subject $subject, \App\Question $question, $index) {
 
-        $subject = \App\Subject::where(['code' => 'NavegacionPER'])->first();
-        \App\SubjectTranslation::updateOrCreate(
-            ['locale' => 'es', 'subject_id' => $subject->id],
+        \App\QuestionTranslation::updateOrCreate(
+            ['locale' => 'es', 'question_id' => $question->id],
             [
-                'name' => 'Navegación',
-                'short_name' => 'Navegación',
-                'description' => 'Asignatura de navegación.'
-            ]
-        );
-        \App\SubjectTranslation::updateOrCreate(
-            ['locale' => 'en', 'subject_id' => $subject->id],
-            [
-                'name' => 'Navigation',
-                'short_name' => 'Navigation',
-                'description' => 'Navigation subject'
+                'statement' => "Pregunta de {$subject->name} número {($index + 1)}."
             ]
         );
 
-        $subject = \App\Subject::where(['code' => 'NomenclaturaPNBPER'])->first();
-        \App\SubjectTranslation::updateOrCreate(
-            ['locale' => 'es', 'subject_id' => $subject->id],
+
+        $subject_name_en = !empty($subject->translate('en')) ? $subject->translate('en')->name : $subject->code;
+        \App\QuestionTranslation::updateOrCreate(
+            ['locale' => 'en', 'question_id' => $question->id],
             [
-                'name' => 'Nomenclatura',
-                'short_name' => 'Nomenclatura',
-                'description' => 'Asignatura de nomenclatura.'
+                'statement' => "Question about {$subject_name_en} number {($index + 1)}."
             ]
         );
 
     }
 
-    public function setRelationCertificates() {
-
-        $PNB = \App\Certificate::where(['code' => 'PNB'])->first();
-        $PER = \App\Certificate::where(['code' => 'PER'])->first();
-
-        $subject = \App\Subject::where(['code' => 'NavegacionPER'])->first();
-        $subject->certificates()->syncWithoutDetaching([
-            $PER->id => [
-                'max_errors' => 3,
-                'num_questions' => 4,
-            ],
-
-        ]);
-
-
-        $subject = \App\Subject::where(['code' => 'NomenclaturaPNBPER'])->first();
-        $subject->certificates()->syncWithoutDetaching([
-            $PNB->id => [
-                'max_errors' => 2,
-                'num_questions' => 3,
-            ],
-
-            $PER->id => [
-                'max_errors' => 1,
-                'num_questions' => 5,
-            ],
-
-        ]);
-    }
 }
