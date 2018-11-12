@@ -27,7 +27,8 @@ class Answer extends BaseModel {
      * @var array
      */
     protected $hidden = [
-        'translations'
+        'translations',
+        'correct'
     ];
 
     protected $dates = [
@@ -46,7 +47,7 @@ class Answer extends BaseModel {
     ];
 
     public function question() {
-        return $this->belongsTo('App\Question','question_id','id')->as('question');
+        return $this->belongsTo('App\Question','question_id','id');
     }
 
     //protected $connection = 'local';

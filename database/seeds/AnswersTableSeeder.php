@@ -25,6 +25,7 @@ class AnswersTableSeeder extends Seeder
                 $answer->uuid = $uuid;
                 $answer->position = $i;
                 $answer->correct = $i === $correct_num;
+                $answer->question_id = $question->id;
                 $answer->save();
                 self::setNames($question,$answer,$i);
             }

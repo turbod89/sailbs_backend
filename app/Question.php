@@ -4,6 +4,7 @@ namespace App;
 use App\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use App\Answer;
 
 class Question extends BaseModel {
 
@@ -49,8 +50,17 @@ class Question extends BaseModel {
         return $this->belongsTo('App\Subject','subject_id','id')->as('subject');
     }
 
-    public function anwsers() {
-        return $this->hasMany('App\Answer','question_id','id')->as('answers');
+    public function answers() {
+        return $this->hasMany('App\Answer','question_id','id');
+    }
+
+    public function toArray()
+    {
+        $json = parent::toArray();
+
+        $json['answers'] = $this->answers->toArray();
+
+        return $json;
     }
 
     //protected $connection = 'local';
