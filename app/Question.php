@@ -49,5 +49,9 @@ class Question extends BaseModel {
         return $this->belongsTo('App\Subject','subject_id','id')->as('subject');
     }
 
+    public function anwsers() {
+        return $this->hasMany('App\Answer','question_id','id')->as('answers');
+    }
+
     //protected $connection = 'local';
 }
