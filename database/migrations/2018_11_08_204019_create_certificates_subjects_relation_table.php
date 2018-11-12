@@ -15,7 +15,7 @@ class CreateCertificatesSubjectsRelationTable extends Migration
     {
         Schema::dropIfExists('certificates_subjects');
         Schema::create('certificates_subjects', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');

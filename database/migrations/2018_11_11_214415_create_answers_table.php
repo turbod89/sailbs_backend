@@ -15,7 +15,7 @@ class CreateAnswersTable extends Migration
     {
         Schema::dropIfExists('answers');
         Schema::create('answers', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');

@@ -15,7 +15,7 @@ class CreateSubjectsTable extends Migration
     {
         Schema::dropIfExists('subjects');
         Schema::create('subjects', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');

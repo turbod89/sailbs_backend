@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::dropIfExists('questions');
         Schema::create('questions', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');
