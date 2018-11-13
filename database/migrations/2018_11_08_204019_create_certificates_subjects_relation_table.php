@@ -19,8 +19,8 @@ class CreateCertificatesSubjectsRelationTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
-            $table->integer('subject_id')->references('id')->on('subjects')->onDelete('cascade');
+            $table->integer('certificate_id')->unsigned();
+            $table->integer('subject_id')->unsigned();
 
             $table->integer('max_errors')->nullable(true);
             $table->integer('num_questions')->nullable(true);
@@ -32,6 +32,8 @@ class CreateCertificatesSubjectsRelationTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->unique(['subject_id','certificate_id']);
+            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
         });
     }
 

@@ -19,8 +19,8 @@ class CreateQuestionsTestsRelationTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->integer('test_id')->references('id')->on('tests')->onDelete('cascade');
+            $table->integer('question_id')->unsigned();
+            $table->integer('test_id')->unsigned();
 
             $table->integer('position')->nullable(false)->default(0);
 
@@ -30,6 +30,8 @@ class CreateQuestionsTestsRelationTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->unique(['question_id','test_id']);
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
         });
     }
 

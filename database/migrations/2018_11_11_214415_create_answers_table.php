@@ -20,7 +20,7 @@ class CreateAnswersTable extends Migration
 
             $table->increments('id');
             $table->uuid('uuid')->nullable(false);
-            $table->integer('question_id')->unsigned()->nullable(false)->references('id')->on('questions')->onDelete('cascade');
+            $table->integer('question_id')->unsigned()->nullable(false);
             $table->integer('position')->nullable(false)->default(0);
             $table->boolean('correct')->nullable(false)->default(false);
 
@@ -32,6 +32,7 @@ class CreateAnswersTable extends Migration
             $table->index('question_id');
             $table->index('uuid');
             $table->unique('uuid');
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
 
         Schema::dropIfExists('answer_translations');
