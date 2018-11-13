@@ -16,7 +16,9 @@ class TestsTableSeeder extends Seeder
         $certificates = \App\Certificate::all();
 
         foreach ($certificates as $certificate) {
-            \App\Test::generate($certificate);
+            for ($i = 0; $i < self::TESTS_PER_CERTIFICATE; $i++) {
+                \App\Test::generate($certificate);
+            }
         }
     }
 
