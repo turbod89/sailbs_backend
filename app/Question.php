@@ -58,7 +58,7 @@ class Question extends BaseModel {
     {
         $json = parent::toArray();
 
-        $json['answers'] = $this->answers->toArray();
+        $json['answers'] = $this->answers()->orderBy('position','asc')->get()->toArray();
 
         return $json;
     }

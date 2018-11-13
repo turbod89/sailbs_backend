@@ -52,7 +52,7 @@ class Subject extends BaseModel {
     }
 
     public function questions() {
-        return $this->hasMany('App\Questions','subject_id','id');
+        return $this->hasMany('App\Question','subject_id','id');
     }
 
     public function toArray()

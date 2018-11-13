@@ -19,8 +19,8 @@ class CreateUserRoleCertificateRelationTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->integer('certificate_id')->unsigned();
             $table->integer('role_id')->default('0')->nullable(false);
 
             $table->boolean('deleted')->default(false);
@@ -29,6 +29,9 @@ class CreateUserRoleCertificateRelationTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
 
             $table->unique(['user_id','role_id','certificate_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
+
         });
     }
 
