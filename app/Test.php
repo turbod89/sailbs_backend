@@ -55,10 +55,14 @@ class Test extends BaseModel {
         $test = new Test();
 
         $subjects = $certificate->subjects;
-        $questions = [];
 
+        $questions = [];
         foreach ($subjects as $subject) {
-            foreach ($subject->questions as $question) {
+            $selectedQuestions = Question::where([['subject_id',$subject->id]])
+                ->inRandomOrder($subject->num_questions)
+                ->limit($subject->subjects_pivot->num_questions)
+                ->get();
+            foreach ($selectedQuestions as $question) {
                 $questions[] = $question;
             }
         }

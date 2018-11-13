@@ -48,7 +48,9 @@ class Certificate extends BaseModel {
     ];
 
     public function subjects() {
-        return $this->belongsToMany('App\Subject','certificates_subjects','certificate_id','subject_id')->as('subjects');
+        return $this->belongsToMany('App\Subject','certificates_subjects','certificate_id','subject_id')
+            ->as('subjects_pivot')
+            ->withPivot('num_questions','max_errors');
     }
 
     public function toArray()
