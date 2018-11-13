@@ -91,5 +91,13 @@ class Test extends BaseModel {
 
     }
 
+    public function toArray() {
+        $json = parent::toArray();
+
+        $json['questions'] = $this->questions()->orderBy('position','asc')->get()->toArray();
+
+        return $json;
+    }
+
     //protected $connection = 'local';
 }
