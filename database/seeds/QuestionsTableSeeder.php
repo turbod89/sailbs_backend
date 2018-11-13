@@ -22,6 +22,7 @@ class QuestionsTableSeeder extends Seeder
                 $uuid = \Webpatser\Uuid\Uuid::generate();
                 $question = new \App\Question();
                 $question->uuid = $uuid;
+                $question->subject_id = $subject->id;
                 $question->save();
                 self::setNames($subject,$question,$i);
             }

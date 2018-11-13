@@ -5,7 +5,7 @@ use App\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class Subject extends BaseModel {
+class Test extends BaseModel {
 
     use \Dimsav\Translatable\Translatable;
 
@@ -13,7 +13,7 @@ class Subject extends BaseModel {
 
     private static $lang = null;
 
-    protected $table = 'subjects';
+    protected $table = 'tests';
     protected $primaryKey = 'id';
 
     /**
@@ -47,27 +47,24 @@ class Subject extends BaseModel {
     protected $maps = [
     ];
 
-    public function certificates() {
-        return $this->belongsToMany('App\Certificate','certificates_subjects','subject_id','certificate_id')->as('certificates');
-    }
-
     public function questions() {
-        return $this->hasMany('App\Question','subject_id','id');
+        return $this->belongsToMany('App\Questions','questions_tests','question_id','test_id')->as('questions');
     }
 
-    public function toArray()
-    {
-        $json = parent::toArray();
+    public static function generate(Certificate $certificate) {
+        $test = new Test();
 
-        $json['certificates'] = [];
-        foreach ($this->certificates as $certificate) {
-            $json['certificates'][] = [
-                'id' => $certificate->id,
-                'code' => $certificate->code,
-            ];
+        $subjects = $certificate->subjects;
+        $questions = [];
+
+        foreach ($subjects as $subject) {
+            foreach ($subject->questions as $question) {
+                $questions[] = $question;
+            }
         }
 
-        return $json;
+        return collect($questions);
+
     }
 
     //protected $connection = 'local';

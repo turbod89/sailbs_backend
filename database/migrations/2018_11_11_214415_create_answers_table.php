@@ -20,7 +20,7 @@ class CreateAnswersTable extends Migration
 
             $table->increments('id');
             $table->uuid('uuid')->nullable(false);
-            $table->integer('question_id')->unsigned()->references('id')->on('questions')->onDelete('cascade');
+            $table->integer('question_id')->unsigned()->nullable(false)->references('id')->on('questions')->onDelete('cascade');
             $table->integer('position')->nullable(false)->default(0);
             $table->boolean('correct')->nullable(false)->default(false);
 

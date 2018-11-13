@@ -20,7 +20,7 @@ class CreateQuestionsTable extends Migration
 
             $table->increments('id');
             $table->uuid('uuid')->nullable(false);
-            $table->integer('subject_id')->unsigned()->references('id')->on('subjects')->onDelete('cascade');
+            $table->integer('subject_id')->unsigned()->nullable(false)->references('id')->on('subjects')->onDelete('cascade');
 
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
