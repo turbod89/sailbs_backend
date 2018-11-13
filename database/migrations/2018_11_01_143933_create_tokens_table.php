@@ -15,7 +15,7 @@ class CreateTokensTable extends Migration
     {
         Schema::dropIfExists('tokens');
         Schema::create('tokens', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');

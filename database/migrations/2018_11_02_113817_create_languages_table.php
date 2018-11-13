@@ -15,7 +15,7 @@ class CreateLanguagesTable extends Migration
     {
         Schema::dropIfExists('languages');
         Schema::create('languages', function (Blueprint $table) {
-            $table->charset = 'utf8';
+            // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');
