@@ -48,26 +48,43 @@ class Test extends BaseModel {
     ];
 
     public function questions() {
-        return $this->belongsToMany('App\Questions','questions_tests','question_id','test_id')->as('questions');
+        return $this->belongsToMany('App\Question','questions_tests','question_id','test_id');
     }
 
     public static function generate(Certificate $certificate) {
-        $test = new Test();
 
+        // create test
+
+        $names = [];
+
+        foreach (TestTranslation::$defaultLocales as $locale) {
+            $localeNames = [];
+            $localeNames['name'] = TestTranslation::generateName($certificate,$locale);
+            $localeNames['short_name'] = TestTranslation::generateShortName($certificate,$locale);
+            $localeNames['description'] = TestTranslation::generateDescription($certificate,$locale);
+            $names[$locale] = $localeNames;
+        }
+        $test = self::create($names);
+
+        // choose questions
         $subjects = $certificate->subjects;
 
-        $questions = [];
+        $question_cnt = 0;
         foreach ($subjects as $subject) {
+
             $selectedQuestions = Question::where([['subject_id',$subject->id]])
                 ->inRandomOrder($subject->num_questions)
                 ->limit($subject->subjects_pivot->num_questions)
                 ->get();
+
             foreach ($selectedQuestions as $question) {
-                $questions[] = $question;
+                $test->questions()->attach([$question->id => ['position' => $question_cnt]]);
+                $question_cnt++;
             }
+
         }
 
-        return collect($questions);
+        return $test;
 
     }
 
