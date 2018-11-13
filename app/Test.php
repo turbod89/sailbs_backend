@@ -48,7 +48,7 @@ class Test extends BaseModel {
     ];
 
     public function questions() {
-        return $this->belongsToMany('App\Question','questions_tests','question_id','test_id');
+        return $this->belongsToMany('App\Question','questions_tests','test_id','question_id');
     }
 
     public static function generate(Certificate $certificate) {
@@ -77,10 +77,13 @@ class Test extends BaseModel {
                 ->limit($subject->subjects_pivot->num_questions)
                 ->get();
 
+            $relations = [];
             foreach ($selectedQuestions as $question) {
-                $test->questions()->attach([$question->id => ['position' => $question_cnt]]);
+                $relations[$question->id] = ['position' => $question_cnt];
                 $question_cnt++;
             }
+
+            $test->questions()->attach($relations);
 
         }
 
