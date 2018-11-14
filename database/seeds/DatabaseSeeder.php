@@ -18,6 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call('SubjectsTableSeeder');
         $this->call('QuestionsTableSeeder');
         $this->call('AnswersTableSeeder');
-        $this->call('TestsTableSeeder');
+        $this->call('ExamsTableSeeder');
     }
 }

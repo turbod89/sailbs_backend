@@ -5,7 +5,7 @@ use App\Helpers;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class Test extends BaseModel {
+class Exam extends BaseModel {
 
     use \Dimsav\Translatable\Translatable;
 
@@ -13,7 +13,7 @@ class Test extends BaseModel {
 
     private static $lang = null;
 
-    protected $table = 'tests';
+    protected $table = 'exams';
     protected $primaryKey = 'id';
 
     /**
@@ -48,23 +48,23 @@ class Test extends BaseModel {
     ];
 
     public function questions() {
-        return $this->belongsToMany('App\Question','questions_tests','test_id','question_id');
+        return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id');
     }
 
     public static function generate(Certificate $certificate) {
 
-        // create test
+        // create exam
 
         $names = [];
 
-        foreach (TestTranslation::$defaultLocales as $locale) {
+        foreach (ExamTranslation::$defaultLocales as $locale) {
             $localeNames = [];
-            $localeNames['name'] = TestTranslation::generateName($certificate,$locale);
-            $localeNames['short_name'] = TestTranslation::generateShortName($certificate,$locale);
-            $localeNames['description'] = TestTranslation::generateDescription($certificate,$locale);
+            $localeNames['name'] = ExamTranslation::generateName($certificate,$locale);
+            $localeNames['short_name'] = ExamTranslation::generateShortName($certificate,$locale);
+            $localeNames['description'] = ExamTranslation::generateDescription($certificate,$locale);
             $names[$locale] = $localeNames;
         }
-        $test = self::create($names);
+        $exam = self::create($names);
 
         // choose questions
         $subjects = $certificate->subjects;
@@ -83,11 +83,11 @@ class Test extends BaseModel {
                 $question_cnt++;
             }
 
-            $test->questions()->attach($relations);
+            $exam->questions()->attach($relations);
 
         }
 
-        return $test;
+        return $exam;
 
     }
 
