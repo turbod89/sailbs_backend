@@ -56,7 +56,9 @@ class AuthBaseController extends BaseController
     public function logout(Request $request) {
 
         // update session token
-        Token::session()->delete();
+        $session = Token::session();
+        $session->id_user = null;
+        $session->save();
 
         return response()
             ->json(['errors' => []]);
