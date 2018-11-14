@@ -4,7 +4,7 @@ namespace App;
 use App\Helpers;
 use Illuminate\Support\Carbon;
 
-class TestTranslation extends BaseModel {
+class ExamTranslation extends BaseModel {
 
     public $timestamps = false;
     protected $fillable = ['name','short_name','description'];

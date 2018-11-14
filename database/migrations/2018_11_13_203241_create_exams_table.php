@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTestsTable extends Migration
+class CreateExamsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class CreateTestsTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('tests');
-        Schema::create('tests', function (Blueprint $table) {
+        Schema::dropIfExists('exams');
+        Schema::create('exams', function (Blueprint $table) {
             // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
@@ -26,17 +26,17 @@ class CreateTestsTable extends Migration
             $table->dateTime('deleted_at')->nullable(true);
         });
 
-        Schema::dropIfExists('test_translations');
-        Schema::create('test_translations', function(Blueprint $table) {
+        Schema::dropIfExists('exam_translations');
+        Schema::create('exam_translations', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('test_id')->unsigned();
+            $table->integer('exam_id')->unsigned();
             $table->string('name');
             $table->string('short_name');
             $table->text('description');
             $table->string('locale')->index();
 
-            $table->unique(['test_id','locale']);
-            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
+            $table->unique(['exam_id','locale']);
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
         });
     }
 
@@ -47,10 +47,10 @@ class CreateTestsTable extends Migration
      */
     public function down()
     {
-        Schema::table('tests', function (Blueprint $table) {
+        Schema::table('exams', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('tests');
-        Schema::dropIfExists('test_translations');
+        Schema::dropIfExists('exams');
+        Schema::dropIfExists('exam_translations');
     }
 }

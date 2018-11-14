@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateQuestionsTestsRelationTable extends Migration
+class CreateQuestionsExamsRelationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateQuestionsTestsRelationTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('questions_tests');
-        Schema::create('questions_tests', function (Blueprint $table) {
+        Schema::dropIfExists('questions_exams');
+        Schema::create('questions_exams', function (Blueprint $table) {
             // $table->charset = 'utf8';
             $table->engine = 'InnoDB';
 
             $table->increments('id');
             $table->integer('question_id')->unsigned();
-            $table->integer('test_id')->unsigned();
+            $table->integer('exam_id')->unsigned();
 
             $table->integer('position')->nullable(false)->default(0);
 
@@ -29,9 +29,9 @@ class CreateQuestionsTestsRelationTable extends Migration
             $table->dateTime('updated_at')->default(DB::raw('NOW()'));
             $table->dateTime('deleted_at')->nullable(true);
 
-            $table->unique(['question_id','test_id']);
+            $table->unique(['question_id','exam_id']);
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('test_id')->references('id')->on('tests')->onDelete('cascade');
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
         });
     }
 
@@ -42,9 +42,9 @@ class CreateQuestionsTestsRelationTable extends Migration
      */
     public function down()
     {
-        Schema::table('questions_tests', function (Blueprint $table) {
+        Schema::table('questions_exams', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('questions_tests');
+        Schema::dropIfExists('questions_exams');
     }
 }

@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Seeder;
 
-class TestsTableSeeder extends Seeder
+class ExamsTableSeeder extends Seeder
 {
 
-    const TESTS_PER_CERTIFICATE = 3;
+    const EXAMS_PER_CERTIFICATE = 3;
     /**
      * Run the database seeds.
      *
@@ -16,8 +16,8 @@ class TestsTableSeeder extends Seeder
         $certificates = \App\Certificate::all();
 
         foreach ($certificates as $certificate) {
-            for ($i = 0; $i < self::TESTS_PER_CERTIFICATE; $i++) {
-                \App\Test::generate($certificate);
+            for ($i = 0; $i < self::EXAMS_PER_CERTIFICATE; $i++) {
+                \App\Exam::generate($certificate);
             }
         }
     }
