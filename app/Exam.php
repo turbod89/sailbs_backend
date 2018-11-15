@@ -72,25 +72,29 @@ class Exam extends BaseModel {
     public static function getUndoneExam(User $user, Certificate $certificate) {
         $query = "
             select
-                sum(if(user_id = {$user->id}, 1, 0)) as isDone,
-                test_id
+                sum(if(er.id is null, 0, 1)) as isDone,
+                exam_id
             from
-                exam_responses
+                exams e
+            left join
+                exam_responses er on er.user_id = ? and er.exam_id = e.id
             group by
-                test_id
+                exam_id
             having
                 isDone = 0
         ";
 
-        $exam_response_row = DB::select($query)->get()->first();
+        $exam_response_rows = DB::select($query,[$user->id]);
 
-        if (empty($exam_response_row)) {
+        error_log(print_r($exam_response_rows,true));
+
+        if (empty($exam_response_rows)) {
             return self::generate($certificate);
         }
 
-        $test_id = $exam_response_row['test_id'];
+        $exam_id = $exam_response_rows[0]->exam_id;
 
-        return self::get($test_id);
+        return self::get($exam_id);
     }
 
     /**
