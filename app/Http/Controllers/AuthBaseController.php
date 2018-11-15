@@ -57,7 +57,7 @@ class AuthBaseController extends BaseController
 
         // update session token
         $session = Token::session();
-        $session->id_user = null;
+        $session->user_id = null;
         $session->save();
 
         return response()
