@@ -20,6 +20,10 @@ class CreateExamResponsesTable extends Migration
 
             $table->increments('id');
 
+            $table->dateTime('started_at')->default(null);
+            $table->dateTime('finished_at')->default(null);
+            $table->dateTime('corrected_at')->default(null);
+
             $table->integer('user_id')->unsigned();
             $table->integer('exam_id')->unsigned();
             $table->integer('certificate_id')->unsigned();

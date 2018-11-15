@@ -51,6 +51,55 @@ class Exam extends BaseModel {
         return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id');
     }
 
+    public function doneUsers() {
+        return $this->belongsToMany('App\Users','exam_responses','user_id','exam_id')
+            ->as('users_pivot')
+            ->withPivot('certificate_id','started_at','finished_at','corrected_at')
+            ->withTimestamps();
+    }
+
+
+    /**
+     * Check if exists an exam not done for this user about this certificate
+     * if exists, it's returns
+     * else create new and returns
+     *
+     * @param User $user
+     * @param Certificate $certificate
+     * @return Exam
+     */
+
+    public static function getUndoneExam(User $user, Certificate $certificate) {
+        $query = "
+            select
+                sum(if(user_id = {$user->id}, 1, 0)) as isDone,
+                test_id
+            from
+                exam_responses
+            group by
+                test_id
+            having
+                isDone = 0
+        ";
+
+        $exam_response_row = DB::select($query)->get()->first();
+
+        if (empty($exam_response_row)) {
+            return self::generate($certificate);
+        }
+
+        $test_id = $exam_response_row['test_id'];
+
+        return self::get($test_id);
+    }
+
+    /**
+     * Generates a new exam
+     *
+     * @param Certificate $certificate
+     * @return Exam
+     */
+
     public static function generate(Certificate $certificate) {
 
         // create exam
