@@ -48,19 +48,19 @@ class Token extends BaseModel {
     ];
 
     public function setUserAttribute(User $user) {
-        $this->attributes['id_user'] = $user->id;
+        $this->attributes['user_id'] = $user->id;
     }
 
     public function setApiAttribute(int $i) {
-        $this->attributes['id_api'] = $i;
+        $this->attributes['api_id'] = $i;
     }
 
     public function getApiAttribute() {
-        return $this->id_api;
+        return $this->api_id;
     }
 
     public function user() {
-        return $this->hasOne('App\User','id','id_user');
+        return $this->hasOne('App\User','id','user_id');
     }
 
     public static function session($session = null) {

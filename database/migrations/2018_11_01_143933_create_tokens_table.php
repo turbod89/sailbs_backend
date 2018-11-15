@@ -21,8 +21,8 @@ class CreateTokensTable extends Migration
             $table->increments('id');
             $table->string('type',32)->nullable(false);
             $table->string('value',128)->nullable(false);
-            $table->integer('id_user')->unsigned()->nullable(true);
-            $table->integer('id_api')->unsigned()->nullable(true);
+            $table->integer('user_id')->unsigned()->nullable(true);
+            $table->integer('api_id')->unsigned()->nullable(true);
             $table->dateTime('expire_at')->nullable(false);
 
             $table->boolean('deleted')->default(false);
@@ -32,10 +32,10 @@ class CreateTokensTable extends Migration
 
             $table->index('type');
             $table->unique('value');
-            $table->index('id_user');
-            $table->index('id_api');
+            $table->index('user_id');
+            $table->index('api_id');
 
-            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
