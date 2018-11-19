@@ -26,7 +26,7 @@ class CreateExamResponsesTable extends Migration
 
             $table->integer('user_id')->unsigned();
             $table->integer('exam_id')->unsigned();
-            $table->integer('certificate_id')->unsigned();
+            // $table->integer('certificate_id')->unsigned();
 
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
@@ -35,7 +35,7 @@ class CreateExamResponsesTable extends Migration
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
-            $table->foreign('certificate_id')->references('id')->on('exams')->onDelete('cascade');
+            // $table->foreign('certificate_id')->references('id')->on('exams')->onDelete('cascade');
         });
 
         Schema::dropIfExists('exam_response_translations');

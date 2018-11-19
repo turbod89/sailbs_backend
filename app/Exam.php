@@ -80,28 +80,33 @@ class Exam extends BaseModel {
             select
                 sum(if(er.user_id = ? , 1, 0)) as times_done_by_user,
                 sum(1) as times_done_by_all_users,
-                exam_id
+                e.id as exam_id
             from
                 exams e
-            inner join
-                exam_responses er on er.certificate_id = ? and er.exam_id = e.id
+            left join
+                exam_responses er on er.exam_id = e.id
+            where
+                e.certificate_id = ?
             group by
-                exam_id
+                e.id
             having
                 times_done_by_user = 0
         ";
 
+
+
         $exam_response_rows = DB::select($query,[$user->id, $certificate->id]);
 
-        error_log(print_r($exam_response_rows,true));
+        // error_log(print_r($exam_response_rows,true));
 
         if (empty($exam_response_rows)) {
             return self::generate($certificate);
         }
 
+        shuffle($exam_response_rows);
         $exam_id = $exam_response_rows[0]->exam_id;
 
-        return self::get($exam_id);
+        return self::find($exam_id);
     }
 
     /**
