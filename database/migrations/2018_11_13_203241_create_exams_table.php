@@ -20,10 +20,14 @@ class CreateExamsTable extends Migration
 
             $table->increments('id');
 
+            $table->integer('certificate_id')->unsigned()->nullable(false);
+
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
             $table->dateTime('updated_at')->default(DB::raw('NOW()'));
             $table->dateTime('deleted_at')->nullable(true);
+
+            $table->foreign('certificate_id')->references('id')->on('certificates')->onDelete('cascade');
         });
 
         Schema::dropIfExists('exam_translations');

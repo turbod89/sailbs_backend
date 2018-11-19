@@ -21,7 +21,9 @@ class Exam extends BaseModel {
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'certificate_id',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -58,6 +60,10 @@ class Exam extends BaseModel {
             ->withTimestamps();
     }
 
+    public function certificate() {
+        return $this->belongsTo('App\Certificate','certificate_id','id');
+    }
+
 
     /**
      * Check if exists an exam not done for this user about this certificate
@@ -72,19 +78,20 @@ class Exam extends BaseModel {
     public static function getUndoneExam(User $user, Certificate $certificate) {
         $query = "
             select
-                sum(if(er.id is null, 0, 1)) as isDone,
+                sum(if(er.user_id = ? , 1, 0)) as times_done_by_user,
+                sum(1) as times_done_by_all_users,
                 exam_id
             from
                 exams e
-            left join
-                exam_responses er on er.user_id = ? and er.exam_id = e.id
+            inner join
+                exam_responses er on er.certificate_id = ? and er.exam_id = e.id
             group by
                 exam_id
             having
-                isDone = 0
+                times_done_by_user = 0
         ";
 
-        $exam_response_rows = DB::select($query,[$user->id]);
+        $exam_response_rows = DB::select($query,[$user->id, $certificate->id]);
 
         error_log(print_r($exam_response_rows,true));
 
@@ -108,16 +115,19 @@ class Exam extends BaseModel {
 
         // create exam
 
-        $names = [];
+        $init = [
+            'certificate_id' => $certificate->id,
+        ];
 
         foreach (ExamTranslation::$defaultLocales as $locale) {
             $localeNames = [];
             $localeNames['name'] = ExamTranslation::generateName($certificate,$locale);
             $localeNames['short_name'] = ExamTranslation::generateShortName($certificate,$locale);
             $localeNames['description'] = ExamTranslation::generateDescription($certificate,$locale);
-            $names[$locale] = $localeNames;
+            $init[$locale] = $localeNames;
         }
-        $exam = self::create($names);
+        $exam = self::create($init);
+        $exam->save();
 
         // choose questions
         $subjects = $certificate->subjects;
