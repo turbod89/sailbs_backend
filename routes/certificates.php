@@ -47,7 +47,7 @@ $router->get('/me/certificates',[
 
 
 /**
- * @api {post} /certificates Subscribe to certificate
+ * @api {post} /me/certificates Subscribe to certificate
  * @apiName subscribe to certificate
  * @apiDescription Relates a certificate with the current user
  * @apiGroup Certificates
@@ -74,7 +74,7 @@ $router->get('/me/certificates',[
  */
 
 
-$router->post('/certificates',[
+$router->post('/me/certificates',[
     'as' => 'add certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@add',
@@ -82,7 +82,7 @@ $router->post('/certificates',[
 
 
 /**
- * @api {delete} /certificates Unsubscribe to certificate
+ * @api {delete} /me/certificates Unsubscribe to certificate
  * @apiName unsubscribe to certificate
  * @apiDescription Delete a relation of a certificate with the current user
  * @apiGroup Certificates
@@ -108,7 +108,7 @@ $router->post('/certificates',[
  * @apiSuccess {Array} errors An array with errors.
  */
 
-$router->delete('/certificates',[
+$router->delete('/me/certificates',[
     'as' => 'remove certificates',
     'middleware' => 'auth',
     'uses' => 'CertificateController@remove',

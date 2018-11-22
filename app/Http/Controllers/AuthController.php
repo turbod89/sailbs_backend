@@ -55,13 +55,9 @@ class AuthController extends AuthBaseController
     }
 
     public static function unauthorizedSessionToken() {
-        return response()
-            ->json([
-                'error' => [
-                    'code' => 1,
-                    'message' => 'Unauthorized session token.',
-                ],
-            ],401);
+        $instance = new BaseController();
+        $instance->addError(1,'Unauthorized session token.');
+        return $instance->jsonData(null,401);
     }
 
 
