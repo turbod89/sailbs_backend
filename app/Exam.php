@@ -159,6 +159,39 @@ class Exam extends BaseModel {
 
     }
 
+    /**
+     * @param $data
+     * @return ExamResponse
+     */
+    public static function correct($data) {
+
+        if (empty($data['exam_id'])) {
+            error_log('Exam id is not provided');
+            return null;
+        }
+
+        $exam_id = $data['exam_id'];
+        $exam = self::find($exam_id);
+
+        if (empty($exam)) {
+            error_log('Invalid exam_id provided');
+            return null;
+        }
+
+        $examResponse = new ExamResponse();
+        $examResponse->finished_at = Carbon::now();
+        $examResponse->exam()->associate($exam);
+        $examResponse->save();
+
+        // TODO: Correct
+
+        $examResponse->corrected_at = Carbon::now();
+        $examResponse->save();
+        return $examResponse;
+
+
+    }
+
     public function toArray() {
         $json = parent::toArray();
 
