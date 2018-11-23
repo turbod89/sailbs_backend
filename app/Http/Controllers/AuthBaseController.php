@@ -25,6 +25,8 @@ class AuthBaseController extends BaseController
     }
 
     public function login(Request $request) {
+        $instance = new BaseController();
+
         $username = $request->input('username');
         $password = $request->input('password');
 
@@ -35,22 +37,15 @@ class AuthBaseController extends BaseController
         ])->first();
 
         if (is_null($user)) {
-            return response()->json([
-                'errors' => [
-                    [
-                        'code' => 1,
-                        'message' => 'Wrong username or password',
-                    ],
-                ],
-            ],401);
+            $instance->addError(1, 'Wrong username or password');
+            return $instance->jsonData(null,401);
         }
 
         // update session token
         Token::session()->user = $user;
         Token::session()->save();
 
-        return response()
-            ->json(['errors' => []]);
+        return $instance->jsonData();
     }
 
     public function logout(Request $request) {
@@ -60,11 +55,14 @@ class AuthBaseController extends BaseController
         $session->user_id = null;
         $session->save();
 
-        return response()
-            ->json(['errors' => []]);
+        $instance = new BaseController();
+
+        return $instance->jsonData();
     }
 
     public function signup(Request $request) {
+        $instance = new BaseController();
+
         $email = $request->input('email');
         $username = $request->input('username');
         $password = $request->input('password');
@@ -76,14 +74,8 @@ class AuthBaseController extends BaseController
         $is_secure = $is_secure ? $this->checkEmail($email) : false;
 
         if (!$is_secure) {
-            return response()->json([
-                'errors' => [
-                    [
-                        'code' => 1,
-                        'message' => 'This credentials are not valid due to format or security.'
-                    ],
-                ]
-            ],401);
+            $instance->addError(1,'This credentials are not valid due to format or security.');
+            return $instance->jsonData(null,401);
         }
 
         // disposable
@@ -93,14 +85,8 @@ class AuthBaseController extends BaseController
         $is_allowed = $is_allowed ? (!User::where([['email', $email]])->exists()) : false;
 
         if (!$is_allowed) {
-            return response()->json([
-                'errors' => [
-                    [
-                        'code' => 1,
-                        'message' => 'This credentials are not valid: username or email are not available.'
-                    ],
-                ]
-            ],401);
+            $instance->addError(1,'This credentials are not valid: username or email are not available.');
+            return $instance->jsonData(null,401);
         }
 
         // register
