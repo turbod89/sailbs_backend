@@ -182,8 +182,26 @@ class Exam extends BaseModel {
         $examResponse->finished_at = Carbon::now();
         $examResponse->exam()->associate($exam);
         $examResponse->save();
+        
+        $responses = isset($data['responses']) ? $data['responses'] : [];
 
-        // TODO: Correct
+        forEach ($responses as $response) {
+            $question_uuid = isset ($response['question_uuid']) ? $response['question_uuid'] : null;
+            $answer_uuid = isset ($response['answer_uuid']) ? $response['answer_uuid'] : null;
+            $question = $exam->questions()->where([['uuid' => $question_uuid]])->first();
+            if (!empty($question)) {
+                $answer = $question->answers()->where([['uuid' => $answer_uuid]])->first();
+
+                if (!empty($answer)) {
+                    $answer_response = new AnswerResponse([
+                        'question_id' => $question->id,
+                        'answer_id' => $answer->id,
+                    ]);
+                    $answer_response->save();
+                }
+            }
+
+        }
 
         $examResponse->corrected_at = Carbon::now();
         $examResponse->save();

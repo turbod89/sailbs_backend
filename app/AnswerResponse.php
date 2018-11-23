@@ -16,7 +16,10 @@ class AnswerResponse extends BaseModel {
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'exam_id',
+        'answer_id',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
