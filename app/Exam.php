@@ -21,7 +21,9 @@ class Exam extends BaseModel {
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'certificate_id',
+    ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -51,20 +53,86 @@ class Exam extends BaseModel {
         return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id');
     }
 
+    public function doneUsers() {
+        return $this->belongsToMany('App\Users','exam_responses','user_id','exam_id')
+            ->as('users_pivot')
+            ->withPivot('certificate_id','started_at','finished_at','corrected_at')
+            ->withTimestamps();
+    }
+
+    public function certificate() {
+        return $this->belongsTo('App\Certificate','certificate_id','id');
+    }
+
+
+    /**
+     * Check if exists an exam not done for this user about this certificate
+     * if exists, it's returns
+     * else create new and returns
+     *
+     * @param User $user
+     * @param Certificate $certificate
+     * @return Exam
+     */
+
+    public static function getUndoneExam(User $user, Certificate $certificate) {
+        $query = "
+            select
+                sum(if(er.user_id = ? , 1, 0)) as times_done_by_user,
+                sum(1) as times_done_by_all_users,
+                e.id as exam_id
+            from
+                exams e
+            left join
+                exam_responses er on er.exam_id = e.id
+            where
+                e.certificate_id = ?
+            group by
+                e.id
+            having
+                times_done_by_user = 0
+        ";
+
+
+
+        $exam_response_rows = DB::select($query,[$user->id, $certificate->id]);
+
+        // error_log(print_r($exam_response_rows,true));
+
+        if (empty($exam_response_rows)) {
+            return self::generate($certificate);
+        }
+
+        shuffle($exam_response_rows);
+        $exam_id = $exam_response_rows[0]->exam_id;
+
+        return self::find($exam_id);
+    }
+
+    /**
+     * Generates a new exam
+     *
+     * @param Certificate $certificate
+     * @return Exam
+     */
+
     public static function generate(Certificate $certificate) {
 
         // create exam
 
-        $names = [];
+        $init = [
+            'certificate_id' => $certificate->id,
+        ];
 
         foreach (ExamTranslation::$defaultLocales as $locale) {
             $localeNames = [];
             $localeNames['name'] = ExamTranslation::generateName($certificate,$locale);
             $localeNames['short_name'] = ExamTranslation::generateShortName($certificate,$locale);
             $localeNames['description'] = ExamTranslation::generateDescription($certificate,$locale);
-            $names[$locale] = $localeNames;
+            $init[$locale] = $localeNames;
         }
-        $exam = self::create($names);
+        $exam = self::create($init);
+        $exam->save();
 
         // choose questions
         $subjects = $certificate->subjects;
@@ -88,6 +156,57 @@ class Exam extends BaseModel {
         }
 
         return $exam;
+
+    }
+
+    /**
+     * @param $data
+     * @return ExamResponse
+     */
+    public static function correct($data) {
+
+        if (empty($data['exam_id'])) {
+            error_log('Exam id is not provided');
+            return null;
+        }
+
+        $exam_id = $data['exam_id'];
+        $exam = self::find($exam_id);
+
+        if (empty($exam)) {
+            error_log('Invalid exam_id provided');
+            return null;
+        }
+
+        $examResponse = new ExamResponse();
+        $examResponse->finished_at = Carbon::now();
+        $examResponse->exam()->associate($exam);
+        $examResponse->save();
+        
+        $responses = isset($data['responses']) ? $data['responses'] : [];
+
+        forEach ($responses as $response) {
+            $question_uuid = isset ($response['question_uuid']) ? $response['question_uuid'] : null;
+            $answer_uuid = isset ($response['answer_uuid']) ? $response['answer_uuid'] : null;
+            $question = $exam->questions()->where([['uuid' => $question_uuid]])->first();
+            if (!empty($question)) {
+                $answer = $question->answers()->where([['uuid' => $answer_uuid]])->first();
+
+                if (!empty($answer)) {
+                    $answer_response = new AnswerResponse([
+                        'question_id' => $question->id,
+                        'answer_id' => $answer->id,
+                    ]);
+                    $answer_response->save();
+                }
+            }
+
+        }
+
+        $examResponse->corrected_at = Carbon::now();
+        $examResponse->save();
+        return $examResponse;
+
 
     }
 
