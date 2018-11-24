@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateExamResponsesTable extends Migration
+class CreateAnswerResponsesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -19,10 +19,6 @@ class CreateExamResponsesTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-
-            $table->dateTime('started_at')->default(null);
-            $table->dateTime('finished_at')->default(null);
-            $table->dateTime('corrected_at')->default(null);
 
             $table->integer('answer_id')->unsigned();
             $table->integer('exam_response_id')->unsigned();
