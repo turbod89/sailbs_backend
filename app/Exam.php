@@ -53,6 +53,13 @@ class Exam extends BaseModel {
         return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id');
     }
 
+    public function answers() {
+
+        return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id')
+                ->getQuery()->join('answers','questions.id','=','answers.question_id')->select('answers.*');
+
+    }
+
     public function doneUsers() {
         return $this->belongsToMany('App\Users','exam_responses','user_id','exam_id')
             ->as('users_pivot')
@@ -186,21 +193,16 @@ class Exam extends BaseModel {
         $responses = isset($data['responses']) ? $data['responses'] : [];
 
         forEach ($responses as $response) {
-            $question_uuid = isset ($response['question_uuid']) ? $response['question_uuid'] : null;
             $answer_uuid = isset ($response['answer_uuid']) ? $response['answer_uuid'] : null;
-            $question = $exam->questions()->where([['uuid' => $question_uuid]])->first();
-            if (!empty($question)) {
-                $answer = $question->answers()->where([['uuid' => $answer_uuid]])->first();
+            $answer = $exam->answers()->where([['uuid' => $answer_uuid]])->first();
 
-                if (!empty($answer)) {
-                    $answer_response = new AnswerResponse([
-                        'question_id' => $question->id,
-                        'answer_id' => $answer->id,
-                    ]);
-                    $answer_response->save();
-                }
+            if (!empty($answer)) {
+                $answer_response = new AnswerResponse([
+                    'answer_id' => $answer->id,
+                    'exam_response_id' => $examResponse->id,
+                ]);
+                $answer_response->save();
             }
-
         }
 
         $examResponse->corrected_at = Carbon::now();
