@@ -17,7 +17,7 @@ class AnswerResponse extends BaseModel {
      * @var array
      */
     protected $fillable = [
-        'exam_id',
+        'exam_response_id',
         'answer_id',
     ];
 
