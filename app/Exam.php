@@ -190,10 +190,10 @@ class Exam extends BaseModel {
             $answer_data = $exam->answers()->where('answers.uuid', $answer_uuid)->first();
 
             if (!empty($answer_data)) {
-                $answer = Answer::find($answer_data->id);
-                $answer_response = new AnswerResponse();
-                $answer_response->answer()->associate($answer);
-                $answer_response->examResponse()->associate($examResponse);
+                $answer_response = new AnswerResponse([
+                    'answer_id' => $answer_data->id,
+                    'exam_response_id' => $examResponse->id,
+                ]);
                 $answer_response->save();
             }
 
