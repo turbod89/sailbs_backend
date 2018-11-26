@@ -75,11 +75,21 @@ $router->get('/me/{certificate_code}/exam',[
 ]);
 
 /**
- * @api {post} /me/certificate_code/exam Get new exam
+ * @api {post} /me/exam/exam_id Correct an exam
  * @apiName Correct exam
  * @apiDescription Correct an exam. Returns a exam response
  * @apiGroup Exams
  *
+ * @apiParamExample {json} Exam-correct-Example:
+ *     {
+ *       "response": [
+ *              {
+ *                  answer_uuid: <answer uuid>
+ *              },
+ *              ...
+ *
+ *          ]
+ *     }
  *
  * @apiSuccess {Array} data Exam data.
  * @apiSuccess {Array} errors An array with errors.
