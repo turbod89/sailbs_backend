@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class SubjectsTableSeeder extends Seeder
 {
+    const NUM_SUBJECTS_PER_CERTIFICATE = 5;
+
     /**
      * Run the database seeds.
      *
@@ -11,11 +13,51 @@ class SubjectsTableSeeder extends Seeder
      */
     public function run()
     {
+        $certificates = \App\Certificate::get()->all();
+
+        $index = 1;
+        foreach ($certificates as $certificate) {
+            for ($i = 0; $i < self::NUM_SUBJECTS_PER_CERTIFICATE; $i++) {
+                $code = "SBJ{$index}";
+                $subject = \App\Subject::updateOrCreate(['code' => $code]);
+                \App\SubjectTranslation::updateOrCreate(
+                    ['locale' => 'es', 'subject_id' => $subject->id],
+                    [
+                        'name' => "Asignatura {$index}",
+                        'short_name' => "As {$index}",
+                        'description' => "Asignatura numero {$index}."
+                    ]
+                );
+                \App\SubjectTranslation::updateOrCreate(
+                    ['locale' => 'en', 'subject_id' => $subject->id],
+                    [
+                        'name' => "Subject {$index}",
+                        'short_name' => "Sbj {$index}",
+                        'description' => "Subject number {$index}."
+                    ]
+                );
+                $num_questions = random_int(3,5);
+                $max_errors = min($num_questions,random_int(1,2*$num_questions));
+                $subject->certificates()->syncWithoutDetaching([
+                    $certificate->id => [
+                        'max_errors' => $max_errors,
+                        'num_questions' => $num_questions,
+                    ],
+
+                ]);
+
+                $index++;
+
+            }
+        }
+
+        /*
         \App\Subject::updateOrCreate([ 'code' => 'NavegacionPER']);
         \App\Subject::updateOrCreate([ 'code' => 'NomenclaturaPNBPER']);
 
         self::setNames();
         self::setRelationCertificates();
+        */
     }
 
 

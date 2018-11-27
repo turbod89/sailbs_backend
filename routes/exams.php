@@ -73,3 +73,20 @@ $router->get('/me/{certificate_code}/exam',[
     'middleware' => 'auth',
     'uses' => 'ExamController@getNewExam',
 ]);
+
+/**
+ * @api {post} /me/certificate_code/exam Get new exam
+ * @apiName Correct exam
+ * @apiDescription Correct an exam. Returns a exam response
+ * @apiGroup Exams
+ *
+ *
+ * @apiSuccess {Array} data Exam data.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->post('/me/exam/{exam_id}',[
+    'as' => 'correct exam',
+    'middleware' => 'auth',
+    'uses' => 'ExamController@correctExam',
+]);

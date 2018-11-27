@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class CertificatesTableSeeder extends Seeder
 {
+
+    const NUM_CERTIFICATES = 4;
     /**
      * Run the database seeds.
      *
@@ -11,10 +13,45 @@ class CertificatesTableSeeder extends Seeder
      */
     public function run()
     {
+        $letters = str_split('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+        $codes = [];
+        for ($i = 0; $i < self::NUM_CERTIFICATES; $i++) {
+            $code = '';
+            for ($j = 0 ; $j < 4; $j++) {
+                $code .= $letters[array_rand($letters,1)];
+            }
+            $codes[] = $code;
+        }
+
+        // generate
+
+        foreach ($codes as $code) {
+            $certificate = \App\Certificate::updateOrCreate(['code' => $code]);
+            \App\CertificateTranslation::updateOrCreate(
+                ['locale' => 'es', 'certificate_id' => $certificate->id],
+                [
+                    'name' => "Título de {$certificate->code}",
+                    'short_name' => "Título de {$certificate->code}",
+                    'description' => "Este título es el de {$certificate->code}"
+                ]
+            );
+            \App\CertificateTranslation::updateOrCreate(
+                ['locale' => 'en', 'certificate_id' => $certificate->id],
+                [
+                    'name' => "Certificate about {$certificate->code}",
+                    'short_name' => "Certificate about {$certificate->code}",
+                    'description' => "This certificate is about {$certificate->code}"
+                ]
+            );
+        };
+
+        /*
         \App\Certificate::updateOrCreate([ 'code' => 'PNB']);
         \App\Certificate::updateOrCreate([ 'code' => 'PER']);
 
         self::setNames();
+        */
     }
 
 
