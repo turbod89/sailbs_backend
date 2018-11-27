@@ -91,6 +91,24 @@ $router->get('/exams/{exam_id}',[
     'uses' => 'ExamController@read',
 ]);
 
+
+/**
+ * @api {get} /me/exams Get exams history
+ * @apiName Get exams history
+ * @apiDescription Get done exams history
+ * @apiGroup Exams
+ *
+ *
+ * @apiSuccess {Array} data Exam data.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->get('/me/exams',[
+    'as' => 'get exams history',
+    'middleware' => 'auth',
+    'uses' => 'ExamResponseController@read',
+]);
+
 /**
  * @api {post} /me/exams/exam_id Correct an exam
  * @apiName Correct exam
