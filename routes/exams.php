@@ -75,7 +75,24 @@ $router->get('/me/{certificate_code}/exam',[
 ]);
 
 /**
- * @api {post} /me/exam/exam_id Correct an exam
+ * @api {get} /exams/exam_id Correct an exam
+ * @apiName Get exam
+ * @apiDescription Get an exam by id
+ * @apiGroup Exams
+ *
+ *
+ * @apiSuccess {Array} data Exam data.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+$router->get('/exams/{exam_id}',[
+    'as' => 'correct exam',
+    'middleware' => 'auth',
+    'uses' => 'ExamController@read',
+]);
+
+/**
+ * @api {post} /me/exams/exam_id Correct an exam
  * @apiName Correct exam
  * @apiDescription Correct an exam. Returns a exam response
  * @apiGroup Exams
@@ -95,7 +112,7 @@ $router->get('/me/{certificate_code}/exam',[
  * @apiSuccess {Array} errors An array with errors.
  */
 
-$router->post('/me/exam/{exam_id}',[
+$router->post('/me/exams/{exam_id}',[
     'as' => 'correct exam',
     'middleware' => 'auth',
     'uses' => 'ExamController@correctExam',

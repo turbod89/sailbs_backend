@@ -21,16 +21,43 @@ class ExamController extends BaseController
 
     //
 
-    public function getNewExam(Request $request, $certificate_code) {
-        $certificate = Certificate::where(['code' => $certificate_code])->first();
+    public function read(Request $request, $exam_id) {
 
-        if (empty($certificate)) {
-            $this->addError(1,'Invalid certificate code.');
+        $exam = Exam::find($exam_id);
+
+        if (empty($exam)) {
+            $this->addError(1,'Invalid exam id.');
             return $this->jsonData();
         }
 
-        $exam = Exam::getUndoneExam($request->user(),$certificate);
+        if ($request->user()->can('read', [$exam])) {
+            return $this->jsonData($exam);
+        } else {
+            $this->addError(1,'Not allowed get this exam.');
+        }
+
+        return $this->jsonData();
+
+    }
+
+    public function getNewExam(Request $request, $certificate_code) {
+
+
+        $certificate = Certificate::where(['code' => $certificate_code])->first();
+
+        if (empty($certificate)) {
+            $this->addError(1, 'Invalid certificate code.');
+            return $this->jsonData();
+        }
+
+        if ($request->user()->cannot('generate', [new Exam, $certificate])) {
+            $this->addError(1, 'Not allowed to get exams for this certificate.');
+            return $this->jsonData();
+        }
+
+        $exam = Exam::getUndoneExam($request->user(), $certificate);
         return $this->jsonData($exam);
+
     }
 
     public function correctExam(Request $request, $exam_id) {
@@ -41,7 +68,11 @@ class ExamController extends BaseController
             return $this->jsonData();
         }
 
-        // TODO: ensure this user can do this exam
+        if ($request->user()->cannot('correct', $exam)) {
+            $this->addError(1, 'Not allowed to correct this exam.');
+            return $this->jsonData();
+        }
+
 
         $request_data = null;
         if ($request->isJson()) {
@@ -52,9 +83,10 @@ class ExamController extends BaseController
 
         $response = isset($request_data['response']) ? $request_data['response'] : [];
 
-        $examResponse = Exam::correct($exam,$request->user(),$response);
+        $examResponse = Exam::correct($exam, $request->user(), $response);
 
         return $this->jsonData($examResponse);
+
 
     }
 }

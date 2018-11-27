@@ -174,7 +174,7 @@ class Exam extends BaseModel {
     /**
      * @param Exam $exam
      * @param User $user
-     * @param Array $response
+     * @param array $response
      * @return ExamResponse
      */
     public static function correct(Exam $exam, User $user, $response) {
