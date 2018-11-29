@@ -183,5 +183,20 @@ class ExamResponse extends BaseModel {
         return $summary->exam_passed;
     }
 
+    public function toArray()
+    {
+        $json = parent::toArray();
+
+        unset($json['exam']);
+        unset($json['user']);
+
+        $json['exam_id'] = $this->exam->id;
+        $json['user_id'] = $this->user->id;
+        $json['certificate_code'] = $this->exam->certificate->code;
+        $json['summary'] = $this->summary;
+
+        return $json;
+    }
+
     //protected $connection = 'local';
 }

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Certificate;
+use App\Exam;
 use App\Policies\CertificatePolicy;
+use App\Policies\ExamPolicy;
 use App\Policies\SubjectPolicy;
 use App\Subject;
 use App\Token;
@@ -42,8 +44,6 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('api', function ($request) {
 
-            error_log('AuthServiceProvider/boot()');
-
             $tokenValue = null;
 
             if ($request->has('session_token') ) {
@@ -71,5 +71,6 @@ class AuthServiceProvider extends ServiceProvider
     public function registerPolicies() {
         Gate::policy(Certificate::class, CertificatePolicy::class);
         Gate::policy(Subject::class,SubjectPolicy::class);
+        Gate::policy(Exam::class,ExamPolicy::class);
     }
 }

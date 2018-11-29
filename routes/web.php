@@ -18,3 +18,4 @@ require_once ('certificates.php');
 require_once ('subjects.php');
 require_once ('questions.php');
 require_once ('profile.php');
+require_once ('exams.php');

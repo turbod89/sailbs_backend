@@ -55,8 +55,13 @@ class Exam extends BaseModel {
 
     public function answers() {
 
-        return $this->belongsToMany('App\Question','questions_exams','exam_id','question_id')
-                ->getQuery()->join('answers','questions.id','=','answers.question_id')->select('answers.*');
+        return DB::table('answers')
+            ->join('questions','questions.id','=','answers.question_id')
+            ->join('questions_exams', function ($join) {
+                $join->on('questions_exams.question_id','=','questions.id');
+                $join->where('questions_exams.exam_id','=',$this->id);
+            })
+            ->select('answers.*');
 
     }
 
@@ -167,42 +172,31 @@ class Exam extends BaseModel {
     }
 
     /**
-     * @param $data
+     * @param Exam $exam
+     * @param User $user
+     * @param array $response
      * @return ExamResponse
      */
-    public static function correct($data) {
-
-        if (empty($data['exam_id'])) {
-            error_log('Exam id is not provided');
-            return null;
-        }
-
-        $exam_id = $data['exam_id'];
-        $exam = self::find($exam_id);
-
-        if (empty($exam)) {
-            error_log('Invalid exam_id provided');
-            return null;
-        }
+    public static function correct(Exam $exam, User $user, $response) {
 
         $examResponse = new ExamResponse();
         $examResponse->finished_at = Carbon::now();
         $examResponse->exam()->associate($exam);
+        $examResponse->user()->associate($user);
         $examResponse->save();
-        
-        $responses = isset($data['responses']) ? $data['responses'] : [];
 
-        forEach ($responses as $response) {
-            $answer_uuid = isset ($response['answer_uuid']) ? $response['answer_uuid'] : null;
-            $answer = $exam->answers()->where([['uuid' => $answer_uuid]])->first();
+        forEach ($response as $answer_response) {
+            $answer_uuid = isset ($answer_response['answer_uuid']) ? $answer_response['answer_uuid'] : null;
+            $answer_data = $exam->answers()->where('answers.uuid', $answer_uuid)->first();
 
-            if (!empty($answer)) {
+            if (!empty($answer_data)) {
                 $answer_response = new AnswerResponse([
-                    'answer_id' => $answer->id,
+                    'answer_id' => $answer_data->id,
                     'exam_response_id' => $examResponse->id,
                 ]);
                 $answer_response->save();
             }
+
         }
 
         $examResponse->corrected_at = Carbon::now();

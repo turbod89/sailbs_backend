@@ -8,7 +8,7 @@ use App\Answer;
 
 class AnswerResponse extends BaseModel {
 
-    protected $table = 'answers_responses';
+    protected $table = 'answer_responses';
     protected $primaryKey = 'id';
 
     /**
