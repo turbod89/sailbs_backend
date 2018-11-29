@@ -77,9 +77,9 @@ class ExamResponse extends BaseModel {
                 convert(asked.num_questions - ifnull(answered.num_correct,0), unsigned integer) as num_errors,
                 asked.max_errors as max_errors,
                 case
-                    when max_errors is null then 1
-                    when max_errors >= asked.num_questions - ifnull(answered.num_correct,0) then 1
-                    else 0
+                    when asked.max_errors is null then 1
+                    when asked.max_errors < (asked.num_questions - ifnull(answered.num_correct,0)) then 0
+                    else 1
                 end as subject_passed
                 
             from 
@@ -131,9 +131,9 @@ class ExamResponse extends BaseModel {
                 convert(asked.num_questions - ifnull(answered.num_correct,0), unsigned integer) as num_errors,
                 asked.max_errors as max_errors,
                 case
-                    when max_errors is null then 1
-                    when max_errors >= asked.num_questions - ifnull(answered.num_correct,0) then 1
-                    else 0
+                    when asked.max_errors is null then 1
+                    when asked.max_errors < (asked.num_questions - ifnull(answered.num_correct,0)) then 0
+                    else 1
                 end as exam_passed
                 
             from 
@@ -189,6 +189,7 @@ class ExamResponse extends BaseModel {
 
         unset($json['exam']);
         unset($json['user']);
+        $json['is_passed'] = $this->is_passed;
 
         $json['exam_id'] = $this->exam->id;
         $json['user_id'] = $this->user->id;
