@@ -22,6 +22,8 @@ class TokenController extends BaseController
 
         $tokenValue = null;
 
+        $instance = new BaseController();
+
 
         if ($request->has('api_token') ) {
             $tokenValue = $request->input('api_token');
@@ -54,7 +56,7 @@ class TokenController extends BaseController
         $sessionToken->api = $token->api;
         $sessionToken->save();
 
-        return response()->json([
+        return $instance->jsonData([
                 'session_token' => $sessionToken->only(['value','expire_at']),
             ]);
     }
