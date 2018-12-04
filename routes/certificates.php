@@ -31,7 +31,7 @@ $router->get('/certificates',[
  * @apiName Get user certificates
  * @apiDescription Get all certificates current user is subscribed to
  * @apiGroup Certificates
- * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
+ * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
  * @apiSuccess {Array} data An array with current subscribed certificates.
  * @apiSuccess {Array} errors An array with errors.
@@ -51,7 +51,7 @@ $router->get('/me/certificates',[
  * @apiName subscribe to certificate
  * @apiDescription Relates a certificate with the current user
  * @apiGroup Certificates
- * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
+ * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
  * @apiParam {Integer} certificate_id (optional) Certficate's wanted to subscribe to id.
  * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to subscribe to ids.
@@ -86,7 +86,7 @@ $router->post('/me/certificates',[
  * @apiName unsubscribe to certificate
  * @apiDescription Delete a relation of a certificate with the current user
  * @apiGroup Certificates
- * @apiHeader {String} session-token Session unique token. Obtained in call <em>Get Session Token</em>.
+ * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
  * @apiParam {Integer} certificate_id (optional) Certficate's wanted to unsubscribe to id.
  * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to unsubscribe to ids.
