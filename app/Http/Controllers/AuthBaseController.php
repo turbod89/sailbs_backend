@@ -41,7 +41,7 @@ class AuthBaseController extends BaseController
             return $instance->jsonData(null,401);
         }
 
-        // update session token
+        // update auth token
         Token::session()->user = $user;
         Token::session()->save();
 
@@ -50,10 +50,10 @@ class AuthBaseController extends BaseController
 
     public function logout(Request $request) {
 
-        // update session token
-        $session = Token::session();
-        $session->user_id = null;
-        $session->save();
+        // update auth token
+        $authToken = Token::session();
+        $authToken->user_id = null;
+        $authToken->save();
 
         $instance = new BaseController();
 

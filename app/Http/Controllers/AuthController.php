@@ -31,63 +31,71 @@ class AuthController extends AuthBaseController
     }
 
 
-    public static function getSessionToken(Request $request,callable $onSuccess,callable $onError) {
-        $tokenValue = null;
+    public static function getAuthToken(Request $request, callable $onSuccess, callable $onError) {
+        $headerValue = null;
 
-        if ($request->has('session_token') ) {
-            $tokenValue = $request->input('session_token');
-        } else if ( $request->headers->has('session-token') ) {
-            $tokenValue = $request->header('session-token');
+        if ($request->has('Authorization') ) {
+            $headerValue = $request->input('Authorization');
+        } else if ( $request->headers->has('Authorization') ) {
+            $headerValue = $request->header('Authorization');
         }
 
-        $sessionToken = Token::where([
-            ['type', 'session token'],
+        $matches = [];
+        preg_match('/^Bearer ([^ ]+)/',$headerValue,$matches);
+
+        $tokenValue = null;
+        if (count($matches) > 1) {
+            $tokenValue = $matches[1];
+        }
+
+        $authToken = Token::where([
+            ['type', 'auth token'],
             ['value' , $tokenValue],
         ])->first();
 
-        Token::session($sessionToken);
+        Token::session($authToken);
 
-        if (is_null($sessionToken)) {
+        if (is_null($authToken)) {
             return $onError($request);
         }
 
         return $onSuccess($request);
     }
 
-    public static function unauthorizedSessionToken() {
+    public static function unauthorizedAuthToken() {
         $instance = new BaseController();
-        $instance->addError(1,'Unauthorized session token.');
+        $instance->addError(1,'Unauthorized auth token.');
         return $instance->jsonData(null,401);
     }
 
 
     public function login(Request $request) {
-        return self::getSessionToken(
+        return self::getAuthToken(
             $request,
             function (Request $request) {
                 return parent::login($request);
             },
-            [self::class,'unauthorizedSessionToken']
+            [self::class, 'unauthorizedAuthToken']
         );
     }
 
     public function logout(Request $request) {
-        return self::getSessionToken(
+        return self::getAuthToken(
             $request,
             function (Request $request) {
                 return parent::logout($request);
             },
-            [self::class,'unauthorizedSessionToken']
+            [self::class, 'unauthorizedAuthToken']
         );
     }
 
     public function signup(Request $request) {
-        return self::getSessionToken(
+        return self::getAuthToken(
             $request,
             function (Request $request) {
                 return parent::signup($request);
             },
-            [self::class,'unauthorizedSessionToken']
+            [self::class, 'unauthorizedAuthToken']
         );
     }
 

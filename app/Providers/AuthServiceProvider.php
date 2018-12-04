@@ -44,26 +44,34 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('api', function ($request) {
 
-            $tokenValue = null;
+            $headerValue = null;
 
-            if ($request->has('session_token') ) {
-                $tokenValue = $request->input('session_token');
-            } else if ( $request->headers->has('session-token') ) {
-                $tokenValue = $request->header('session-token');
+            if ($request->has('Authorization') ) {
+                $headerValue = $request->input('Authorization');
+            } else if ( $request->headers->has('Authorization') ) {
+                $headerValue = $request->header('Authorization');
             }
 
-            $sessionToken = Token::where([
-                ['type', 'session token'],
+            $matches = [];
+            preg_match('/^Bearer ([^ ]+)/',$headerValue,$matches);
+
+            $tokenValue = null;
+            if (count($matches) > 1) {
+                $tokenValue = $matches[1];
+            }
+
+            $authToken = Token::where([
+                ['type', 'auth token'],
                 ['value' , $tokenValue],
             ])->first();
 
-            Token::session($sessionToken);
+            Token::session($authToken);
 
-            if (is_null($sessionToken)) {
+            if (is_null($authToken)) {
                 return null;
             }
 
-            return $sessionToken->user;
+            return $authToken->user;
         });
 
     }

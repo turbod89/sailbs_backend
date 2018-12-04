@@ -11,7 +11,7 @@
  */
 
 /**
- * @api {get} /tokens Get Session Token
+ * @api {get} /tokens Get Auth Token
  * @apiName GetToken
  * @apiGroup Token
  *
@@ -22,5 +22,5 @@
 
 $router->get('/tokens',[
     'as' => 'getToken',
-    'uses' => 'TokenController@getSessionToken',
+    'uses' => 'TokenController@getAuthToken',
 ]);

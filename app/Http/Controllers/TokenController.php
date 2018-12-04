@@ -18,7 +18,7 @@ class TokenController extends BaseController
         parent::__construct();
     }
 
-    public function getSessionToken(Request  $request) {
+    public function getAuthToken(Request  $request) {
 
         $tokenValue = null;
 
@@ -47,17 +47,17 @@ class TokenController extends BaseController
             ],401);
         }
 
-        $sessionToken = new Token([
-            'type' => 'session token',
+        $authToken = new Token([
+            'type' => 'auth token',
             'value' => md5(''.(1000*microtime(true))),
             'expire_at' => Carbon::now()->addDays(7),
         ]);
 
-        $sessionToken->api = $token->api;
-        $sessionToken->save();
+        $authToken->api = $token->api;
+        $authToken->save();
 
         return $instance->jsonData([
-                'session_token' => $sessionToken->only(['value','expire_at']),
+                'auth_token' => $authToken->only(['value','expire_at']),
             ]);
     }
 }

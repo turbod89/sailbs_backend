@@ -37,7 +37,7 @@ class Authenticate
     public function handle($request, Closure $next, $guard = null)
     {
         if ($this->auth->guard($guard)->guest()) {
-            return AuthController::unauthorizedSessionToken($request);
+            return AuthController::unauthorizedAuthToken($request);
         }
 
         return $next($request);
