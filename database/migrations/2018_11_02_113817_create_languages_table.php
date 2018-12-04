@@ -55,7 +55,7 @@ class CreateLanguagesTable extends Migration
         Schema::table('languages', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('languages');
         Schema::dropIfExists('language_translations');
+        Schema::dropIfExists('languages');
     }
 }

@@ -54,7 +54,7 @@ class CreateCertificatesTable extends Migration
         Schema::table('certificates', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('certificates');
         Schema::dropIfExists('certificate_translations');
+        Schema::dropIfExists('certificates');
     }
 }

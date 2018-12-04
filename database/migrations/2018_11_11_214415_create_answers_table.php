@@ -57,7 +57,7 @@ class CreateAnswersTable extends Migration
         Schema::table('answers', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('answers');
         Schema::dropIfExists('answer_translations');
+        Schema::dropIfExists('answers');
     }
 }

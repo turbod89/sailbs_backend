@@ -54,7 +54,7 @@ class CreateExamsTable extends Migration
         Schema::table('exams', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('exams');
         Schema::dropIfExists('exam_translations');
+        Schema::dropIfExists('exams');
     }
 }

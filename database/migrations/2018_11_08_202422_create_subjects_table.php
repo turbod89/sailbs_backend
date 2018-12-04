@@ -54,7 +54,7 @@ class CreateSubjectsTable extends Migration
         Schema::table('subjects', function (Blueprint $table) {
             //
         });
-        Schema::dropIfExists('subjects');
         Schema::dropIfExists('subject_translations');
+        Schema::dropIfExists('subjects');
     }
 }
