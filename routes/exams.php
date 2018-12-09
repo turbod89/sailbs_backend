@@ -353,7 +353,7 @@ $router->get('/me/exams/{exam_response_id}',[
  *          ]
  *     }
  *
- * @apiSuccessExample Succes-Resposte:
+ * @apiSuccessExample Success-Resposte:
  *      HTTP 1.1 200 OK
  * {
  *     "data": {

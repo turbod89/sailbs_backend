@@ -28,6 +28,8 @@ class CreateUsersTable extends Migration
             $table->string('first_name',32)->nullable(true);
             $table->string('last_name',32)->nullable(true);
 
+            $table->integer('role_id')->unsigned()->nullable(true);
+
             $table->boolean('deleted')->default(false);
             $table->dateTime('created_at')->default(DB::raw('NOW()'));
             $table->dateTime('updated_at')->default(DB::raw('NOW()'));
@@ -35,6 +37,7 @@ class CreateUsersTable extends Migration
 
             $table->unique('email', 'email');
             $table->unique('username', 'username');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
         });
     }
 

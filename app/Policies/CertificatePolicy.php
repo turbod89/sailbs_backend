@@ -17,7 +17,7 @@ class CertificatePolicy
      */
     public function add(User $user, Certificate $certificate, User $user_target)
     {
-        return $user->id === $user_target->id;
+        return $user->hasRole(['admin','coordinator']) || $user->id === $user_target->id;
     }
 
     /**

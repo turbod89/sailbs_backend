@@ -20,7 +20,7 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password'
+        'username', 'email', 'password', 'role_id'
     ];
 
     /**
@@ -43,6 +43,26 @@ class User extends BaseModel implements AuthenticatableContract, AuthorizableCon
 
     public function exam_responses() {
         return $this->hasMany('App\ExamResponse','user_id','id');
+    }
+
+    public function role() {
+        return $this->belongsTo('App\Role','role_id','id');
+    }
+
+    public function hasRole($role_codes) {
+        if (is_string($role_codes)) {
+            return $this->role->code === $role_codes;
+        }
+
+        if (is_array($role_codes)) {
+            foreach ($role_codes as $role_code) {
+                if ($this->role->code === $role_code) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

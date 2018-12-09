@@ -13,15 +13,15 @@ class SubjectPolicy
     }
 
     public function create(?User $user) {
-        return false;
+        return $user->hasRole('admin');
     }
 
     public function update(?User $user) {
-        return false;
+        return $user->hasRole('admin');
     }
 
     public function delete(?User $user) {
-        return false;
+        return $user->hasRole('admin');
     }
 
 }

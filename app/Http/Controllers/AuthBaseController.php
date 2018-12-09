@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\Token;
 use App\User;
 use Illuminate\Http\Request;
@@ -14,6 +15,8 @@ use Illuminate\Http\Request;
 
 class AuthBaseController extends BaseController
 {
+
+    const DEFAULT_USER_ROLE = 'student';
     /**
      * Create a new controller instance.
      *
@@ -66,6 +69,8 @@ class AuthBaseController extends BaseController
         $email = $request->input('email');
         $username = $request->input('username');
         $password = $request->input('password');
+        $role_code = self::DEFAULT_USER_ROLE;
+        $role = Role::where('code',$role_code)->first();
 
         // security
         $is_secure = true;
@@ -95,6 +100,7 @@ class AuthBaseController extends BaseController
             'username' => $username,
             'email' => $email,
             'password' => $password,
+            'role_id' => $role->id,
         ]);
 
         $user->save();
