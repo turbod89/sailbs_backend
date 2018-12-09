@@ -10,14 +10,48 @@
  |
  */
 
+
 /**
+ * @apiDefine CertificateRequests
+ * @apiHeader (Headers) {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
+ * @apiSuccess {Array} errors An array with errors.
+ */
+
+/**
+ * @apiUse CertificateRequests
+ * @apiGroup Certificates
+ *
  * @api {get} /certificates Get certificates
  * @apiName Get Certificates
  * @apiDescription Get all available certificates
- * @apiGroup Certificates
  *
  * @apiSuccess {Array} data An array with all certificates.
- * @apiSuccess {Array} errors An array with errors.
+ * @apiSuccessExample {json} Success-Base-Example-Response:
+ *  {
+ *     "data": [
+ *         {
+ *             "id": 1,
+ *             "code": "PKKK",
+ *             "deleted": 0,
+ *             "created_at": "2018-12-05 15:04:24",
+ *             "updated_at": "2018-12-05 15:04:24",
+ *             "deleted_at": null,
+ *             "name": "Título de PKKK",
+ *             "short_name": "Título de PKKK",
+ *             "description": "Este título es el de PKKK",
+ *             "subjects": [
+ *                 {
+ *                     "id": 1,
+ *                     "code": "SBJ1"
+ *                 },
+ *                 ...
+ *             ]
+ *         },
+ *         ...
+ *
+ *      "errors": [<error>, ...]
+ *
+ * }
  */
 
 $router->get('/certificates',[
@@ -27,14 +61,41 @@ $router->get('/certificates',[
 
 
 /**
+ * @apiUse CertificateRequests
+ * @apiGroup Certificates
+ *
  * @api {get} /me/certificates Get user certificates
  * @apiName Get user certificates
  * @apiDescription Get all certificates current user is subscribed to
- * @apiGroup Certificates
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
  * @apiSuccess {Array} data An array with current subscribed certificates.
  * @apiSuccess {Array} errors An array with errors.
+ * @apiSuccessExample {json} Success-Base-Example-Response:
+ *  {
+ *     "data": [
+ *         {
+ *             "id": 1,
+ *             "code": "PKKK",
+ *             "deleted": 0,
+ *             "created_at": "2018-12-05 15:04:24",
+ *             "updated_at": "2018-12-05 15:04:24",
+ *             "deleted_at": null,
+ *             "name": "Título de PKKK",
+ *             "short_name": "Título de PKKK",
+ *             "description": "Este título es el de PKKK",
+ *             "subjects": [
+ *                 {
+ *                     "id": 1,
+ *                     "code": "SBJ1"
+ *                 },
+ *                 ...
+ *             ]
+ *         },
+ *         ...
+ *
+ *      "errors": [<error>, ...]
+ *
+ * }
  */
 
 
@@ -47,30 +108,46 @@ $router->get('/me/certificates',[
 
 
 /**
+ * @apiUse CertificateRequests
+ * @apiGroup Certificates
+ *
  * @api {post} /me/certificates Subscribe to certificate
  * @apiName subscribe to certificate
  * @apiDescription Relates a certificate with the current user
- * @apiGroup Certificates
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
- * @apiParam {Integer} certificate_id (optional) Certficate's wanted to subscribe to id.
- * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to subscribe to ids.
- * @apiParam {String} certificate_code (optional) Certficate's wanted to subscribe to code.
- * @apiParam {Array} certificate_codes (optional) Array with certficates's wanted to subscribe to codes.
+ * @apiParam (Body) {Integer} certificate_id (optional) Certficate's wanted to subscribe to id.
+ * @apiParam (Body) {Array} certificate_ids (optional) Array with certficates's wanted to subscribe to ids.
+ * @apiParam (Body) {String} certificate_code (optional) Certficate's wanted to subscribe to code.
+ * @apiParam (Body) {Array} certificate_codes (optional) Array with certficates's wanted to subscribe to codes.
  *
- * @apiParam {Integer} user_id (optional) User who wanted to subscribe to id. If no user provided, logged user will be used.
- * @apiParam {Array} user_ids (optional) Array with users whose wanted to subscribe to ids. If no user provided, logged user will be used.
+ * @apiParam (Body) {Integer} user_id (optional) User who wanted to subscribe to id. If no user provided, logged user will be used.
+ * @apiParam (Body) {Array} user_ids (optional) Array with users whose wanted to subscribe to ids. If no user provided, logged user will be used.
  *
  * @apiParamExample {json} Subscribe-Example:
  *     {
  *       "certificate_codes": [
- *              "PNB",
- *              "PER"
+ *              "PKKK",
+ *              "QPFZ"
  *          ]
  *     }
  *
  * @apiSuccess {Array} data An array with the pairs (user, certificate) successfully subscribed.
  * @apiSuccess {Array} errors An array with errors.
+ * @apiSuccessExample {json} Subscribe-Example-Response:
+ *  {
+ *     "data": [
+ *         {
+ *             "user": 1,
+ *             "certificate": "PKKK"
+ *         },
+ *         {
+ *             "user": 1,
+ *             "certificate": "QPFZ"
+ *         }
+ *      ],
+ *      "errors": [<error>, ...]
+ *
+ * }
  */
 
 
@@ -82,30 +159,46 @@ $router->post('/me/certificates',[
 
 
 /**
+ * @apiUse CertificateRequests
+ * @apiGroup Certificates
+ *
  * @api {delete} /me/certificates Unsubscribe to certificate
  * @apiName unsubscribe to certificate
  * @apiDescription Delete a relation of a certificate with the current user
- * @apiGroup Certificates
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
  *
- * @apiParam {Integer} certificate_id (optional) Certficate's wanted to unsubscribe to id.
- * @apiParam {Array} certificate_ids (optional) Array with certficates's wanted to unsubscribe to ids.
- * @apiParam {String} certificate_code (optional) Certficate's wanted to unsubscribe to code.
- * @apiParam {Array} certificate_codes (optional) Array with certficates's wanted to unsubscribe to codes.
+ * @apiParam (Body) {Integer} certificate_id (optional) Certficate's wanted to unsubscribe to id.
+ * @apiParam (Body) {Array} certificate_ids (optional) Array with certficates's wanted to unsubscribe to ids.
+ * @apiParam (Body) {String} certificate_code (optional) Certficate's wanted to unsubscribe to code.
+ * @apiParam (Body) {Array} certificate_codes (optional) Array with certficates's wanted to unsubscribe to codes.
  *
- * @apiParam {Integer} user_id (optional) User who wanted to unsubscribe to id.
- * @apiParam {Array} user_ids (optional) Array with users whose wanted to unsubscribe to ids.
+ * @apiParam (Body) {Integer} user_id (optional) User who wanted to unsubscribe to id.
+ * @apiParam (Body) {Array} user_ids (optional) Array with users whose wanted to unsubscribe to ids.
  *
  * @apiParamExample {json} Unsubscribe-Example:
  *     {
  *       "certificate_codes": [
- *              "PNB",
- *              "PER"
+ *              "PKKK",
+ *              "QPFZ"
  *          ]
  *     }
  *
  * @apiSuccess {Array} data An array with the pairs (user, certificate) successfully unsubscribed.
  * @apiSuccess {Array} errors An array with errors.
+ * @apiSuccessExample {json} Unsubscribe-Example-Response:
+ *  {
+ *     "data": [
+ *         {
+ *             "user": 1,
+ *             "certificate": "PKKK"
+ *         },
+ *         {
+ *             "user": 1,
+ *             "certificate": "QPFZ"
+ *         }
+ *      ],
+ *      "errors": [<error>, ...]
+ * }
+ *
  */
 
 $router->delete('/me/certificates',[

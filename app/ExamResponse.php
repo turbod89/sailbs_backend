@@ -194,6 +194,13 @@ class ExamResponse extends BaseModel {
         $json['exam_id'] = $this->exam->id;
         $json['user_id'] = $this->user->id;
         $json['certificate_code'] = $this->exam->certificate->code;
+
+        return $json;
+    }
+
+    public function toArrayDetailed() {
+        $json = $this->toArray();
+
         $json['summary'] = $this->summary;
         $json['subject_summary'] = $this->subject_summary;
 

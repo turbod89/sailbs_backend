@@ -11,15 +11,27 @@
  */
 
 /**
+ * @apiDefine AuthRequests
+ * @apiHeader (Headers) {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
+ * @apiSuccess {Array} errors An array with errors.
+ * @apiSuccessExample {json} Success-Base-Example:
+ *  {
+ *      "data": null,
+ *      "errors": [<error>, ...]
+ *
+ * }
+ */
+
+/**
+ * @apiUse AuthRequests
+ * @apiGroup Authorization
+ *
  * @api {post} /auth User Login
  * @apiName Login
- * @apiGroup Authorization
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
+ * @apiDescription Logs an user in.
  *
- * @apiParam {String} username Username.
- * @apiParam {String} password User's password.
- *
- * @apiSuccess {Array} errors An array with errors.
+ * @apiParam (Body) {String} username Username.
+ * @apiParam (Body) {String} password User's password.
  */
 
 $router->post('/auth',[
@@ -34,13 +46,12 @@ $router->post('/auth/login',[
 
 
 /**
- * @api {delete} /auth User Logout
- * @apiName Logout
+ * @apiUse AuthRequests
  * @apiGroup Authorization
  *
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
- *
- * @apiSuccess {Array} errors An array with errors.
+ * @api {delete} /auth User Logout
+ * @apiName Logout
+ * @apiDescription Logs an user out.
  */
 
 $router->delete('/auth',[
@@ -55,17 +66,16 @@ $router->get('/auth/logout',[
 
 
 /**
- * @api {post} /auth/signup User Signup
- * @apiName Signup
+ * @apiUse AuthRequests
  * @apiGroup Authorization
  *
- * @apiHeader {String} Authorization Bearer Auth token. Obtained in call <em>Get Auth Token</em>.
+ * @api {post} /auth/signup User Signup
+ * @apiName Signup
+ * @apiDescription Register an user and, if success, loges in.
  *
- * @apiParam {String} username Username.
- * @apiParam {String} password User's password.
- * @apiParam {String} email User's email.
- *
- * @apiSuccess {Array} errors An array with errors.
+ * @apiParam (Body) {String} username Username.
+ * @apiParam (Body) {String} password User's password.
+ * @apiParam (Body) {String} email User's email.
  */
 
 $router->post('/auth/signup',[
