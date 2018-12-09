@@ -196,6 +196,37 @@ $router->get('/exams/{exam_id}',[
  *                 },
  *                 ...
  *             ]
+ *             "response": [
+ *                 {
+ *                     "id": 794,
+ *                     "uuid": "2dad9440-f299-11e8-88e6-a5bcec384349",
+ *                     "question_id": 199,
+ *                     "position": 1,
+ *                     "deleted": 0,
+ *                     "created_at": "2018-11-27 23:07:14",
+ *                     "updated_at": "2018-11-27 23:07:14",
+ *                     "deleted_at": null,
+ *                     "exam_response_id": 99,
+ *                     "statement": "Respuesta correcta a la pregunta \"Pregunta de Asignatura 20 número 9.\" número 2.",
+ *                     "question_uuid": "df4a0040-f298-11e8-97c1-6509f70443bc"
+ *                 },
+ *                 ...
+ *             ],
+ *             "correct_answers": [
+ *                 {
+ *                     "id": 607,
+ *                     "answer_uuid": "1b080420-f299-11e8-89af-1d08448208e1",
+ *                     "question_id": 152,
+ *                     "question_uuid": "da756260-f298-11e8-92c4-49bcbbca530d",
+ *                     "position": 2,
+ *                     "correct": 1,
+ *                     "deleted": 0,
+ *                     "created_at": "2018-11-27 23:06:43",
+ *                     "updated_at": "2018-11-27 23:06:43",
+ *                     "deleted_at": null
+ *                 },
+ *                 ...
+ *             ]
  *         },
  *         ...
  *     ],
@@ -257,6 +288,37 @@ $router->get('/me/exams',[
  *                "subject_passed": 1
  *            },
  *            ...
+ *        ],
+ *        "response": [
+ *            {
+ *                "id": 794,
+ *                "uuid": "2dad9440-f299-11e8-88e6-a5bcec384349",
+ *                "question_id": 199,
+ *                "position": 1,
+ *                "deleted": 0,
+ *                "created_at": "2018-11-27 23:07:14",
+ *                "updated_at": "2018-11-27 23:07:14",
+ *                "deleted_at": null,
+ *                "exam_response_id": 99,
+ *                "statement": "Respuesta correcta a la pregunta \"Pregunta de Asignatura 20 número 9.\" número 2.",
+ *                "question_uuid": "df4a0040-f298-11e8-97c1-6509f70443bc"
+ *            },
+ *            ...
+ *        ],
+ *        "correct_answers": [
+ *            {
+ *                "id": 607,
+ *                "answer_uuid": "1b080420-f299-11e8-89af-1d08448208e1",
+ *                "question_id": 152,
+ *                "question_uuid": "da756260-f298-11e8-92c4-49bcbbca530d",
+ *                "position": 2,
+ *                "correct": 1,
+ *                "deleted": 0,
+ *                "created_at": "2018-11-27 23:06:43",
+ *                "updated_at": "2018-11-27 23:06:43",
+ *                "deleted_at": null
+ *            },
+ *            ...
  *        ]
  *     },
  *     "errors": []
@@ -290,6 +352,78 @@ $router->get('/me/exams/{exam_response_id}',[
  *
  *          ]
  *     }
+ *
+ * @apiSuccessExample Succes-Resposte:
+ *      HTTP 1.1 200 OK
+ * {
+ *     "data": {
+ *        "id": 1,
+ *        "started_at": "-0001-11-30 00:00:00",
+ *        "finished_at": "2018-12-02 16:42:11",
+ *        "corrected_at": "2018-12-02 16:42:12",
+ *        "user_id": 1,
+ *        "exam_id": 1,
+ *        "deleted": 0,
+ *        "created_at": "2018-12-02 16:42:11",
+ *        "updated_at": "2018-12-02 16:42:12",
+ *        "deleted_at": null,
+ *        "is_passed": 1,
+ *        "certificate_code": "PDSS",
+ *        "summary": {
+ *            "exam_response_id": 1,
+ *            "num_questions": 19,
+ *            "num_answered": 19,
+ *            "num_correct": 6,
+ *            "num_errors": 13,
+ *            "max_errors": 99999,
+ *            "exam_passed": 1
+ *        },
+ *        "subject_summary": [
+ *            {
+ *                "subject_id": 1,
+ *                "num_questions": 3,
+ *                "num_answered": 3,
+ *                "num_correct": 1,
+ *                "num_errors": 2,
+ *                "max_errors": 2,
+ *                "subject_passed": 1
+ *            },
+ *            ...
+ *        ],
+ *        "response": [
+ *            {
+ *                "id": 794,
+ *                "uuid": "2dad9440-f299-11e8-88e6-a5bcec384349",
+ *                "question_id": 199,
+ *                "position": 1,
+ *                "deleted": 0,
+ *                "created_at": "2018-11-27 23:07:14",
+ *                "updated_at": "2018-11-27 23:07:14",
+ *                "deleted_at": null,
+ *                "exam_response_id": 99,
+ *                "statement": "Respuesta correcta a la pregunta \"Pregunta de Asignatura 20 número 9.\" número 2.",
+ *                "question_uuid": "df4a0040-f298-11e8-97c1-6509f70443bc"
+ *            },
+ *            ...
+ *        ],
+ *        "correct_answers": [
+ *            {
+ *                "id": 607,
+ *                "answer_uuid": "1b080420-f299-11e8-89af-1d08448208e1",
+ *                "question_id": 152,
+ *                "question_uuid": "da756260-f298-11e8-92c4-49bcbbca530d",
+ *                "position": 2,
+ *                "correct": 1,
+ *                "deleted": 0,
+ *                "created_at": "2018-11-27 23:06:43",
+ *                "updated_at": "2018-11-27 23:06:43",
+ *                "deleted_at": null
+ *            },
+ *            ...
+ *        ]
+ *     },
+ *     "errors": []
+ * }
  *
  * @apiSuccess {Array} data Exam data.
  */

@@ -64,7 +64,33 @@ class ExamResponse extends BaseModel {
     }
 
     public function answers() {
-        return $this->hasManyThrough('App\Answer','App\AnswerResponse','exam_response_id','id','id','answer_response_id');
+        return $this->hasManyThrough('App\Answer','App\AnswerResponse','exam_response_id','id','id','answer_id');
+    }
+
+    public function getCorrectAnswersAttribute() {
+        $query = "
+            select
+                a.id,
+                a.uuid as answer_uuid,
+                a.question_id,
+                q.uuid as question_uuid,
+                a.position,
+                a.correct,
+                a.deleted,
+                a.created_at,
+                a.updated_at,
+                a.deleted_at
+            from answers a
+            inner join questions q on a.question_id = q.id and a.correct = 1
+            inner join questions_exams qe on q.id = qe.question_id
+            inner join exams e on qe.exam_id = e.id
+            inner join exam_responses er on e.id = er.exam_id and er.id = ?
+            order by qe.position
+        ";
+
+        $correct_answers = DB::select($query,[$this->id]);
+
+        return $correct_answers;
     }
 
     public function getSubjectSummaryAttribute() {
@@ -203,6 +229,8 @@ class ExamResponse extends BaseModel {
 
         $json['summary'] = $this->summary;
         $json['subject_summary'] = $this->subject_summary;
+        $json['correct_answers'] = $this->correct_answers;
+        $json['response'] = $this->answers;
 
         return $json;
     }

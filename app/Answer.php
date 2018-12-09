@@ -50,5 +50,12 @@ class Answer extends BaseModel {
         return $this->belongsTo('App\Question','question_id','id');
     }
 
+    public function toArray()
+    {
+        $json = parent::toArray();
+        $json['question_uuid'] = $this->question->uuid;
+        return $json;
+    }
+
     //protected $connection = 'local';
 }
