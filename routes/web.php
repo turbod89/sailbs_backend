@@ -11,6 +11,11 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+require_once ('test.php');
+require_once ('tokens.php');
+require_once ('auth.php');
+require_once ('certificates.php');
+require_once ('subjects.php');
+require_once ('questions.php');
+require_once ('profile.php');
+require_once ('exams.php');
