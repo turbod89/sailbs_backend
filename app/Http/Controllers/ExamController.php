@@ -85,7 +85,7 @@ class ExamController extends BaseController
 
         $examResponse = Exam::correct($exam, $request->user(), $response);
 
-        return $this->jsonData($examResponse);
+        return $this->jsonData($examResponse->toArrayDetailed());
 
 
     }
